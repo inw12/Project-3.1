@@ -76,7 +76,8 @@ public class PlayerAttackMelee : MonoBehaviour
         }
 
         _dashTimer += deltaTime;
-
+        
+        #region Melee Targeting Implementation
         // Scan for enemies
         var outerHits = Physics.OverlapSphereNonAlloc
         (
@@ -92,25 +93,17 @@ public class PlayerAttackMelee : MonoBehaviour
             _innerHits,
             enemyLayer
         );
-        
-        // Melee Targeting 
-        _target = outerHits > 0 ? _outerHits[0].transform.position : Vector3.zero;
-        var directionToTarget = (Vector3.ProjectOnPlane(_target, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
-        var directionToCursor = (Vector3.ProjectOnPlane(state.Target, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
-        _target = Vector3.Dot(directionToCursor, directionToTarget) > 0.5f ? _target : Vector3.zero;
+        // *** more logic goes here ***
+        #endregion
 
-        // Calculate target velocity for melee dash
-        var direction = _target == Vector3.zero ? (state.Target - transform.position).normalized    // move towards cursor
-                                                : (_target - transform.position).normalized;        // or move towards target
+        var direction = (state.Target - transform.position).normalized;
         _dashVelocity = direction * dashSpeed;        
-
         // Reset velocity if dash duration ended
         _dashVelocity = _dashTimer < dashDuration ? _dashVelocity : Vector3.zero;
-        // Multiply velocity if dashing towards target
-        _dashVelocity = outerHits > 0 ? _dashVelocity * targetedDashSpeedMultiplier : _dashVelocity;
         // Reset velocity if target is in "inner" range
         _dashVelocity = innerHits == 0 ? _dashVelocity : Vector3.zero;
         PlayerMovement.Instance.SetVelocity(_dashVelocity, dashAcceleration);
+        PlayerMovement.Instance.SetRotation(Quaternion.LookRotation(direction));
     }
 
     public void UpdateHitbox(float deltaTime)

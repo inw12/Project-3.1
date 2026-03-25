@@ -128,4 +128,4 @@ MonoBehaviour:
   hitboxRadius: 0.75
   hitLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 1024

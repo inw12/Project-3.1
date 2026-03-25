@@ -166,36 +166,36 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateRotation(float deltaTime)
     {
-        Quaternion targetRotation;
-        
-
         // Rotate towards mouse position
         // (Ranged Attack)
         if (playerCombat.GetState().CurrentAction is CombatAction.Ranged)
         {
-            targetRotation = Quaternion.LookRotation(_requestedMousePos);
+            var targetRotation = Quaternion.LookRotation(_requestedMousePos);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * deltaTime)
+            );
+        }
+        // Do Nothing
+        // (Melee Attack; rotation directly affected from 'PlayerAttackMelee.cs')
+        else if (playerCombat.GetState().CurrentAction is CombatAction.Melee)
+        {
+            
         }
         // Rotate towards direction of movement
         // (Normal Movement)
         else if (_requestedMovement.sqrMagnitude > 0f)
         {
-            targetRotation = Quaternion.LookRotation(_requestedMovement);
+            var targetRotation = Quaternion.LookRotation(_requestedMovement);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * deltaTime)
+            );
         }
-        // No Rotation
-        // (Idle)
-        else
-        {
-            targetRotation = Quaternion.LookRotation(transform.forward);
-        }
-
-
-        // * Apply Rotation *
-        transform.rotation = Quaternion.Lerp
-        (
-            transform.rotation,
-            targetRotation,
-            1f - Mathf.Exp(-moveRotation * deltaTime)
-        );
     }
 
 
@@ -220,6 +220,7 @@ public class PlayerMovement : MonoBehaviour
         );
     }
     public void Stop() => _state.Velocity = Vector3.zero;
+    public void SetRotation(Quaternion rotation) => transform.rotation = rotation;
     #endregion
 
     // State Getters
