@@ -1,5 +1,4 @@
 ﻿<Solution>
-  <Project Path="Enemy.csproj" />
   <Project Path="Player.csproj" />
   <Project Path="Core.csproj" />
   <Project Path="Combat.csproj" />
