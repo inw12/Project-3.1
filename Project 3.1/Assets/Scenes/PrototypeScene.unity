@@ -1008,6 +1008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 373c1bfe13da14a37b9709bea5c41d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::CameraManager
+  startingState: 1
   mainCamera: {fileID: 330585545}
   positionLerpSpeed: 5
   rotationLerpSpeed: 5
@@ -1126,6 +1127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Enemy::Enemy
   hurtbox: {fileID: 882505322}
   maxHealth: 100
+  maxDefense: 100
 --- !u!1 &2016430191
 GameObject:
   m_ObjectHideFlags: 0
