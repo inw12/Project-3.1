@@ -643,6 +643,7 @@ GameObject:
   m_Component:
   - component: {fileID: 882505320}
   - component: {fileID: 882505321}
+  - component: {fileID: 882505322}
   m_Layer: 10
   m_Name: Hurtbox
   m_TagString: Untagged
@@ -688,6 +689,26 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &882505322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882505319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c208fa582ea74f62987ad5917b3f05a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Enemy::EnemyHurtbox
+  controller: {fileID: 0}
+  enemyModel: {fileID: 790578502}
+  hitColor: {r: 0.9245283, g: 0.06541473, b: 0.06541473, a: 0.5019608}
+  hitBrightness: 20
+  effectSpeed: 12.5
+  pulseAmount: 0.3
+  shrinkSpeed: 30
+  growSpeed: 20
 --- !u!1 &970500954
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,6 +864,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1935789515}
+  - component: {fileID: 1935789516}
   m_Layer: 9
   m_Name: EnemyCapsule
   m_TagString: Untagged
@@ -867,6 +889,20 @@ Transform:
   - {fileID: 882505320}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1935789516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935789514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85f02b8d61f143fca7f84854bc1d9b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Enemy::Enemy
+  hurtbox: {fileID: 882505322}
+  maxHealth: 100
 --- !u!1 &2016430191
 GameObject:
   m_ObjectHideFlags: 0
