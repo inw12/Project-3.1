@@ -19,7 +19,7 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
-        SwitchTo<BehindPlayerCamera>();
+        SwitchTo<DefaultCamera>();
     }
 
     void LateUpdate()
