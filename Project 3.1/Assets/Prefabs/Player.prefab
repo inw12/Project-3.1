@@ -1058,7 +1058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 12
   moveAcceleration: 20
-  moveRotation: 10
+  moveRotation: 15
   hurtbox: {fileID: 7041147594141494943}
   dodgeSpeed: 12
   dodgeAcceleration: 20
@@ -1076,12 +1076,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6af0bc6120a4480583162d1e9c42099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerCombat
-  rangedAttack: {fileID: 6501891967276764438}
-  meleeAttack: {fileID: 55354276240820591}
-  parry: {fileID: 4934762821648068288}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!114 &6501891967276764438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1095,9 +1089,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerAttackRanged
   damage: 1
-  fireRate: 0.24
-  projectileSpeed: 25
-  projectileRange: 50
+  fireRate: 0.4
+  projectileSpeed: 40
+  projectileRange: 65
   projectilePool: {fileID: 0}
   projectileSpawn: {fileID: 3885068725202724606}
 --- !u!114 &55354276240820591
@@ -1114,13 +1108,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Player::PlayerAttackMelee
   damage: 2
   meleeOuterRange: 8
-  meleeInnerRange: 3
+  meleeInnerRange: 2.5
   dashSpeed: 10
   dashAcceleration: 20
   dashDuration: 0.1
   targetedDashSpeedMultiplier: 1.5
+  comboBuffer: 0.33
   hitstunDuration: 0.1
-  comboBuffer: 0.5
   animationController: {fileID: 7767103367595275973}
   enemyLayer:
     serializedVersion: 2

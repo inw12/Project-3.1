@@ -1,5 +1,6 @@
+using System.Collections;
 using UnityEngine;
-public class EnemyHurtbox : MonoBehaviour, IDamageable, IKnockbackable
+public class EnemyHurtbox : MonoBehaviour, IDamageable, IKnockbackable, IHitstunnable
 {
     [SerializeField] private CharacterController controller;
     [SerializeField] private Transform enemyModel;
@@ -20,11 +21,13 @@ public class EnemyHurtbox : MonoBehaviour, IDamageable, IKnockbackable
 
     private float _maxHealth;
     private float _currentHealth;
+    private bool _inHitstun;
 
     // Interface Variables
     public CharacterController CharacterController => controller;
     public float MaxHealth => _maxHealth;
     public float CurrentHealth => _currentHealth;
+    public bool InHitstun => _inHitstun;
 
     public void Initialize(float health)
     {
@@ -42,16 +45,16 @@ public class EnemyHurtbox : MonoBehaviour, IDamageable, IKnockbackable
         _defaultScale = transform.localScale;
     }
 
-    public void UpdateModel()
+    public void UpdateModel(float deltaTime)
     {
         // Emission Lerp
         Color current = _material.GetColor("_EmissionColor");
-        Color next = Color.Lerp(current, _defaultColor, Time.deltaTime * effectSpeed);
+        Color next = Color.Lerp(current, _defaultColor, deltaTime * effectSpeed);
         _material.SetColor("_EmissionColor", next);
 
         // Scale Lerp
         enemyModel.localScale = _defaultScale + _scaleOffset;
-        _scaleOffset = Vector3.Lerp(_scaleOffset, Vector3.zero, Time.deltaTime * growSpeed);
+        _scaleOffset = Vector3.Lerp(_scaleOffset, Vector3.zero, deltaTime * growSpeed);
     }
 
     // 'IDamagable' methods
@@ -82,5 +85,17 @@ public class EnemyHurtbox : MonoBehaviour, IDamageable, IKnockbackable
     public void Knockback(float amount, float duration)
     {
         throw new System.NotImplementedException();
+    }
+
+    // 'IHitstunnable'
+    public void TriggerHitstun(float duration)
+    {
+        StartCoroutine(HitstunRoutine(duration));
+    }
+    private IEnumerator HitstunRoutine(float duration)
+    {
+        Enemy.Instance.SetTimeScale(0);
+        yield return new WaitForSeconds(duration);
+        Enemy.Instance.SetTimeScale(1);
     }
 }

@@ -703,12 +703,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Enemy::EnemyHurtbox
   controller: {fileID: 0}
   enemyModel: {fileID: 790578502}
-  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  hitColor: {r: 1, g: 0.495283, b: 0.495283, a: 1}
   hitBrightness: 5
-  effectSpeed: 14
-  pulseAmount: 0.3
-  shrinkSpeed: 35
-  growSpeed: 15
+  effectSpeed: 20
+  pulseAmount: 0.2
+  shrinkSpeed: 15
+  growSpeed: 30
 --- !u!1 &970500954
 GameObject:
   m_ObjectHideFlags: 0
@@ -1127,33 +1127,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 55354276240820591, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
-      propertyPath: comboBuffer
-      value: 0.33
+      propertyPath: hitstunDuration
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 3784538819646688819, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 4712341509815855531, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
-      propertyPath: moveRotation
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 6501891967276764438, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
-      propertyPath: fireRate
-      value: 0.4
-      objectReference: {fileID: 0}
     - target: {fileID: 6501891967276764438, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: projectilePool
       value: 
       objectReference: {fileID: 7003397382392103176}
-    - target: {fileID: 6501891967276764438, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
-      propertyPath: projectileRange
-      value: 65
-      objectReference: {fileID: 0}
-    - target: {fileID: 6501891967276764438, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
-      propertyPath: projectileSpeed
-      value: 40
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

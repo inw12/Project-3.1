@@ -16,10 +16,12 @@ public class PlayerAttackMelee : MonoBehaviour
     private float _dashTimer;
 
     [Header("Combo")]
-    [SerializeField] private float hitstunDuration;
     [SerializeField] private float comboBuffer;
     private int _comboCounter;
     private float _comboTimer;
+
+    [Header("Hitstun")]
+    [SerializeField] private float hitstunDuration;
     private bool _hitstunActive;
     private float _hitstunTimer;
 
@@ -37,7 +39,6 @@ public class PlayerAttackMelee : MonoBehaviour
     private readonly Collider[] _meleeHits = new Collider[5];
     private readonly Collider[] _outerHits = new Collider[5];
     private readonly Collider[] _innerHits = new Collider[5];
-    private Vector3 _target;
 
     private Vector3 _meleeGizmos;
 
@@ -139,9 +140,10 @@ public class PlayerAttackMelee : MonoBehaviour
                 animationController.UpdateMeleeAnimation(_hitstunActive);
 
                 var hit = _meleeHits[0];
-                if (hit.TryGetComponent(out IDamageable e))
+                if (hit.TryGetComponent(out IDamageable e) && hit.TryGetComponent(out IHitstunnable h))
                 {
                     e.DecreaseHealth(damage);
+                    h.TriggerHitstun(hitstunDuration);
                     _hitboxActive = false;
                 }
             }
