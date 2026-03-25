@@ -24,7 +24,7 @@ public class PlayerCombat : MonoBehaviour
 {
     /// * Referenced by:
     ///     - 'PlayerAnimationRig.cs'               (triggers ranged attack animation rig)
-    ///     - 'OnMeleeStart.cs' & 'OnMeleeEnd.cs'   (StateMachineBehaviors for syncronizing melee logic and animations)
+    ///     - StateMachineBehavior scripts          (to syncronize animations & input)
     public static PlayerCombat Instance { get; private set; }
 
     private PlayerAttackRanged _rangedAttack;
@@ -146,7 +146,7 @@ public class PlayerCombat : MonoBehaviour
     private void OnMeleeAttack(float deltaTime)
     {
         // Update Melee Data
-        _meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, deltaTime);
+        _meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, ref _combatInputEnabled, deltaTime);
         _meleeAttack.UpdateHitbox(deltaTime);
 
         // Melee Combo START
@@ -191,10 +191,6 @@ public class PlayerCombat : MonoBehaviour
     public CombatState GetPrevState() => _prevState;
 
     #region StateMachineBehavior Methods
-    // Bool setters for 'OnMeleeStart.cs' & 'OnMeleeEnd.cs' StateMachineBehaviors
-    public void EnableMeleeInput() => _meleeAttack.EnableMeleeInput();
-    public void DisableMeleeInput() => _meleeAttack.DisableMeleeInput();
-
     public void EnableMeleeHitbox() => _meleeAttack.EnableMeleeHitbox();
     public void DisableMeleeHitbox() => _meleeAttack.DisableMeleeHitbox();
     #endregion

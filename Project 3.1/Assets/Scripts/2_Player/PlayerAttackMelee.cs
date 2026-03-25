@@ -39,13 +39,11 @@ public class PlayerAttackMelee : MonoBehaviour
     private readonly Collider[] _innerHits = new Collider[5];
     private Vector3 _target;
 
-    private bool _meleeInputEnabled;
     private Vector3 _meleeGizmos;
 
     public void Initialize()
     {
         ResetMeleeCombo();
-        _meleeInputEnabled = true;
     }
 
     void OnDrawGizmosSelected()
@@ -59,7 +57,7 @@ public class PlayerAttackMelee : MonoBehaviour
     }
 
     // Called every frame in "PlayerCombat" when in the "Melee" state
-    public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, float deltaTime)
+    public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, ref bool inputEnabled, float deltaTime)
     {
         // Exit Melee State once timer exceeds combo input buffer
         if (_comboTimer > comboBuffer) 
@@ -71,11 +69,12 @@ public class PlayerAttackMelee : MonoBehaviour
         }
 
         // Input buffers should only update when able to input
-        if (_meleeInputEnabled)
+        if (inputEnabled)
         {
             // Increment Timers
             _comboTimer += deltaTime;
         }
+
         _dashTimer += deltaTime;
 
         // Scan for enemies
@@ -98,7 +97,7 @@ public class PlayerAttackMelee : MonoBehaviour
         _target = outerHits > 0 ? _outerHits[0].transform.position : Vector3.zero;
         var directionToTarget = (Vector3.ProjectOnPlane(_target, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
         var directionToCursor = (Vector3.ProjectOnPlane(state.Target, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
-        _target = Vector3.Dot(directionToCursor, directionToTarget) > 0f ? _target : Vector3.zero;
+        _target = Vector3.Dot(directionToCursor, directionToTarget) > 0.5f ? _target : Vector3.zero;
 
         // Calculate target velocity for melee dash
         var direction = _target == Vector3.zero ? (state.Target - transform.position).normalized    // move towards cursor
@@ -170,17 +169,14 @@ public class PlayerAttackMelee : MonoBehaviour
     // Called whenever "melee" button is pressed
     public void TriggerAttack()
     {
-        if (_meleeInputEnabled)
-        {
-            _comboTimer = 0f;
-            _dashTimer = 0f;
+        _comboTimer = 0f;
+        _dashTimer = 0f;
 
-            if (_comboCounter == 3) _comboCounter = 0;
-            _comboCounter++;
-            _comboCounter = Math.Clamp(_comboCounter, 0, 3);
+        if (_comboCounter == 3) _comboCounter = 0;
+        _comboCounter++;
+        _comboCounter = Math.Clamp(_comboCounter, 0, 3);
 
-            animationController.UpdateMeleeAnimation(_comboCounter);
-        }
+        animationController.UpdateMeleeAnimation(_comboCounter);
     }
 
     private void ResetMeleeCombo()
@@ -189,9 +185,6 @@ public class PlayerAttackMelee : MonoBehaviour
         _comboTimer = 0f;
         _dashTimer = 0f;
     }
-
-    public void EnableMeleeInput() => _meleeInputEnabled = true;
-    public void DisableMeleeInput() => _meleeInputEnabled = false;
 
     public void EnableMeleeHitbox() => _hitboxActive = true;
     public void DisableMeleeHitbox() => _hitboxActive = false;
