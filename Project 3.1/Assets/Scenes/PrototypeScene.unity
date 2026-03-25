@@ -703,12 +703,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Enemy::EnemyHurtbox
   controller: {fileID: 0}
   enemyModel: {fileID: 790578502}
-  hitColor: {r: 0.9245283, g: 0.06541473, b: 0.06541473, a: 0.5019608}
-  hitBrightness: 20
-  effectSpeed: 12.5
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  hitBrightness: 5
+  effectSpeed: 14
   pulseAmount: 0.3
-  shrinkSpeed: 30
-  growSpeed: 20
+  shrinkSpeed: 35
+  growSpeed: 15
 --- !u!1 &970500954
 GameObject:
   m_ObjectHideFlags: 0
