@@ -16,21 +16,20 @@ public struct CombatInput
     public bool Ranged;
     public bool Melee;
     public bool Parry;
-    public Vector2 MousePosition;
+    public Vector3 MousePosition;
 }
+
+[RequireComponent(typeof(PlayerAttackRanged), typeof(PlayerAttackMelee), typeof(PlayerParry))]
 public class PlayerCombat : MonoBehaviour
 {
     /// * Referenced by:
-    ///     - 'PlayerMovement.cs'                   (handles character rotation depending on current attack)
     ///     - 'PlayerAnimationRig.cs'               (triggers ranged attack animation rig)
     ///     - 'OnMeleeStart.cs' & 'OnMeleeEnd.cs'   (StateMachineBehaviors for syncronizing melee logic and animations)
     public static PlayerCombat Instance { get; private set; }
 
-    [SerializeField] private PlayerAttackRanged rangedAttack;
-    [SerializeField] private PlayerAttackMelee meleeAttack;
-    [SerializeField] private PlayerParry parry;
-    [Space]
-    [SerializeField] private LayerMask groundLayer;
+    private PlayerAttackRanged _rangedAttack;
+    private PlayerAttackMelee _meleeAttack;
+    private PlayerParry _parry;
 
     private bool _combatInputEnabled;
 
@@ -38,7 +37,7 @@ public class PlayerCombat : MonoBehaviour
     private bool _requestedRanged;
     private bool _requestedMelee;
     private bool _requestedParry;
-    private Vector2 _requestedMousePos;
+    private Vector3 _requestedMousePos;
 
     // State Machine
     private CombatState _state;
@@ -61,6 +60,11 @@ public class PlayerCombat : MonoBehaviour
 
     public void Initialize()
     {
+        // Initialize Combat Scripts
+        _rangedAttack = GetComponent<PlayerAttackRanged>();
+        _meleeAttack = GetComponent<PlayerAttackMelee>();
+        _parry = GetComponent<PlayerParry>();
+
         // Enable Combat Inputs
         _combatInputEnabled = true;
 
@@ -70,8 +74,8 @@ public class PlayerCombat : MonoBehaviour
         _prevState = _state;
 
         // Initialize Combat Actions
-        rangedAttack.Initialize();
-        meleeAttack.Initialize();
+        _rangedAttack.Initialize();
+        _meleeAttack.Initialize();
 
         _meleeStarted = false;
     }
@@ -80,8 +84,6 @@ public class PlayerCombat : MonoBehaviour
     {
         if (_combatInputEnabled)
         {
-            _requestedMousePos = input.MousePosition;
-
             // Only allow combat actions when NOT DODGING
             if (PlayerMovement.Instance.GetState().CurrentAction is not MovementAction.Dodge)
             {
@@ -97,23 +99,20 @@ public class PlayerCombat : MonoBehaviour
                 //  AND we're not performing a melee attack
                 //  AND we're not performing a parry
                 _requestedRanged = input.Ranged && _state.CurrentAction is not CombatAction.Melee or CombatAction.Parry;
+
+                _requestedMousePos = input.MousePosition;
             }
             else
             {
                 _requestedParry = _requestedMelee = _requestedRanged = false;
             }
-        }     
-
-        // Mark world position relative to mouse position on screen
-        Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedMousePos);
-        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer))
-        {
-            _state.Target = hit.point;
-        }  
+        }
     }
 
     public void UpdateCombatAction(float deltaTime)
     {
+        _state.Target = _requestedMousePos;
+
         // State Machine Control
         switch (_state.CurrentAction)
         {
@@ -124,7 +123,7 @@ public class PlayerCombat : MonoBehaviour
                 OnMeleeAttack(deltaTime);
                 break;
             case CombatAction.Ranged:
-                OnRangedAttack(deltaTime);
+                On_RangedAttack(deltaTime);
                 break;
             default:
                 TryEnterNewState();
@@ -147,26 +146,26 @@ public class PlayerCombat : MonoBehaviour
     private void OnMeleeAttack(float deltaTime)
     {
         // Update Melee Data
-        meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, deltaTime);
-        meleeAttack.UpdateHitbox(deltaTime);
+        _meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, deltaTime);
+        _meleeAttack.UpdateHitbox(deltaTime);
 
         // Melee Combo START
         if (!_meleeStarted && _state.CurrentAction is CombatAction.Melee)
         {
             _meleeStarted = true;
             PlayerMovement.Instance.DisableMovementInput();
-            meleeAttack.TriggerAttack();
+            _meleeAttack.TriggerAttack();
         }
 
         // Melee Combo CONTINUE
         if (_requestedMelee)
         {
-            meleeAttack.TriggerAttack();
+            _meleeAttack.TriggerAttack();
         }
     }
-    private void OnRangedAttack(float deltaTime)
+    private void On_RangedAttack(float deltaTime)
     {
-        rangedAttack.Attack(ref _state, deltaTime);
+        _rangedAttack.Attack(ref _state, deltaTime);
 
         if (!_requestedRanged)
         {
@@ -182,7 +181,10 @@ public class PlayerCombat : MonoBehaviour
 
     // Public methods to enable/disable combat inputs
     public void EnableCombatInput() => _combatInputEnabled = true;
-    public void DisableCombatInput() => _combatInputEnabled = false;
+    public void DisableCombatInput()
+    {
+        _combatInputEnabled = _requestedMelee = _requestedParry = _requestedRanged = false;
+    } 
 
     // State Getters
     public CombatState GetState() => _state;
@@ -190,10 +192,10 @@ public class PlayerCombat : MonoBehaviour
 
     #region StateMachineBehavior Methods
     // Bool setters for 'OnMeleeStart.cs' & 'OnMeleeEnd.cs' StateMachineBehaviors
-    public void EnableMeleeInput() => meleeAttack.EnableMeleeInput();
-    public void DisableMeleeInput() => meleeAttack.DisableMeleeInput();
+    public void EnableMeleeInput() => _meleeAttack.EnableMeleeInput();
+    public void DisableMeleeInput() => _meleeAttack.DisableMeleeInput();
 
-    public void EnableMeleeHitbox() => meleeAttack.EnableMeleeHitbox();
-    public void DisableMeleeHitbox() => meleeAttack.DisableMeleeHitbox();
+    public void EnableMeleeHitbox() => _meleeAttack.EnableMeleeHitbox();
+    public void DisableMeleeHitbox() => _meleeAttack.DisableMeleeHitbox();
     #endregion
 }

@@ -11,9 +11,17 @@ public enum MovementAction
     Move  = 1, 
     Dodge = 2
 }
+public struct MovementInput
+{
+    public Vector2 Movement;
+    public bool Dodge;
+    public Vector3 MousePosition;
+}
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    /// * Referenced by:
+    ///     - PlayerCombat.cs
     public static PlayerMovement Instance { get; private set; }
 
     [Header("Movement")]
@@ -26,14 +34,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dodgeSpeed= 7f;
     [SerializeField] private float dodgeAcceleration = 15f;
     [SerializeField] private float dodgeDuration = 1f;
-
-    private struct DodgeData
-    {
-        public Vector3 Direction;
-        public bool Triggered;
-        public float Timer;
-    }
-    private DodgeData _dodgeData;
+    [Header("Misc Components")]
+    [SerializeField] private PlayerCombat playerCombat;
 
     private CharacterController _controller;
     private bool _movementInputEnabled;
@@ -41,11 +43,20 @@ public class PlayerMovement : MonoBehaviour
     // Requested Inputs
     private Vector3 _requestedMovement;
     private bool _requestedDodge;
-    private Vector2 _requestedCursor;
+    private Vector3 _requestedMousePos;
 
     // State Machine
     private MovementState _state;
     private MovementState _prevState;
+
+    // Dodge Variables
+    private struct DodgeData
+    {
+        public Vector3 Direction;
+        public bool Triggered;
+        public float Timer;
+    }
+    private DodgeData _dodgeData;
 
     void Awake()
     {
@@ -74,10 +85,11 @@ public class PlayerMovement : MonoBehaviour
         _prevState = _state;
     }
 
-    // * Read player input *
-    //  Called in UPDATE() in 'Player.cs'
+    // * Record Player Input *
+    // ~ called in UPDATE() in 'Player.cs' ~
     public void UpdateInput(MovementInput input)
     {
+        // Only read input if '_movementInputEnabled' is TRUE
         if (_movementInputEnabled)
         {
             // Movement Direction
@@ -86,14 +98,14 @@ public class PlayerMovement : MonoBehaviour
             // Dodge Input
             _requestedDodge = input.Dodge;
             TryTriggerDodge();
-            
-            // Mouse Input
-            _requestedCursor = input.MousePosition;
+
+            // Mouse Position
+            _requestedMousePos = input.MousePosition;
         }
     }
 
     // Should be called in FIXEDUPDATE() in 'Player'
-    public void UpdateMovement(float deltaTime)
+    public void UpdateMovement(float fixedDeltaTime)
     {
         ApplyGravity();        
 
@@ -101,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
         if (_dodgeData.Triggered)
         {
             _state.CurrentAction = MovementAction.Dodge;
-            _dodgeData.Timer += deltaTime;
+            _dodgeData.Timer += fixedDeltaTime;
 
             // Sustain dodge velocity during duration
             var targetVelocity = dodgeSpeed * _dodgeData.Direction;
@@ -109,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
             (
                 _state.Velocity,
                 targetVelocity,
-                1f - Mathf.Exp(-dodgeAcceleration * deltaTime)
+                1f - Mathf.Exp(-dodgeAcceleration * fixedDeltaTime)
             );
 
             // Reset everything once dodge duration reached
@@ -121,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         // REGULAR Movement
-        else if (_requestedMovement.sqrMagnitude > 0f)
+        else if (_requestedMovement.sqrMagnitude > 0f && _movementInputEnabled)
         {
             _state.CurrentAction = MovementAction.Move;
 
@@ -130,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
             (
                 _state.Velocity,
                 targetVelocity,
-                1f - Mathf.Exp(-moveAcceleration * deltaTime)
+                1f - Mathf.Exp(-moveAcceleration * fixedDeltaTime)
             );
         }
         // IDLE
@@ -141,12 +153,12 @@ public class PlayerMovement : MonoBehaviour
             (
                 _state.Velocity,
                 Vector3.zero,
-                1f - Mathf.Exp(-moveAcceleration * deltaTime)
+                1f - Mathf.Exp(-moveAcceleration * fixedDeltaTime)
             );
         }
 
         // Apply Movement
-        _controller.Move(_state.Velocity * deltaTime);
+        _controller.Move(_state.Velocity * fixedDeltaTime);
 
         // Update State Machine
         _prevState = _state;
@@ -156,14 +168,26 @@ public class PlayerMovement : MonoBehaviour
     {
         Quaternion targetRotation;
         
-        if (_requestedMovement.sqrMagnitude > 0f)
+
+        // Rotate towards mouse position
+        // (Ranged Attack)
+        if (playerCombat.GetState().CurrentAction is CombatAction.Ranged)
+        {
+            targetRotation = Quaternion.LookRotation(_requestedMousePos);
+        }
+        // Rotate towards direction of movement
+        // (Normal Movement)
+        else if (_requestedMovement.sqrMagnitude > 0f)
         {
             targetRotation = Quaternion.LookRotation(_requestedMovement);
         }
+        // No Rotation
+        // (Idle)
         else
         {
             targetRotation = Quaternion.LookRotation(transform.forward);
         }
+
 
         // * Apply Rotation *
         transform.rotation = Quaternion.Lerp
@@ -195,7 +219,7 @@ public class PlayerMovement : MonoBehaviour
             1f - Mathf.Exp(-acceleration * Time.deltaTime)
         );
     }
-    public void ResetVelocity() => _state.Velocity = Vector3.zero;
+    public void Stop() => _state.Velocity = Vector3.zero;
     #endregion
 
     // State Getters

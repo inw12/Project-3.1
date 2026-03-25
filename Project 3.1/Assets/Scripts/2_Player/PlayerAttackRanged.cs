@@ -11,7 +11,6 @@ public class PlayerAttackRanged : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private ProjectilePool projectilePool;
-    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform projectileSpawn;
 
     public void Initialize()
