@@ -35,7 +35,7 @@ public class PlayerAnimationRig : MonoBehaviour
     //   if the player is currently performing a RANGED ATTACK
     public void UpdateRig()
     {
-        _state = PlayerCombat.Instance.GetState();
+        //_state = PlayerCombat.Instance.GetState();
 
         _rigActive = _state.CurrentAction is CombatAction.Ranged;
 

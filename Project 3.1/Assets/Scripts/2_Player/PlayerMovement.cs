@@ -1,10 +1,4 @@
 using UnityEngine;
-public struct MovementInput
-{
-    public Vector2 Movement;
-    public bool Dodge;
-    public Vector2 MousePosition;
-}
 public struct MovementState
 {
     public MovementAction CurrentAction;
@@ -20,8 +14,6 @@ public enum MovementAction
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-    /// * Referenced by:
-    ///     - 'PlayerCombat.cs' (to control movement during certain combat actions)
     public static PlayerMovement Instance { get; private set; }
 
     [Header("Movement")]
@@ -163,25 +155,11 @@ public class PlayerMovement : MonoBehaviour
     public void UpdateRotation(float deltaTime)
     {
         Quaternion targetRotation;
-        var combatState = PlayerCombat.Instance.GetState();
-
-        // Rotate character towards MOUSE POSITION ------------ (Ranged Attack)
-        if (combatState.CurrentAction is CombatAction.Ranged or CombatAction.Melee)
-        {
-            targetRotation = Quaternion.LookRotation(combatState.Target);
-        }
-        // Rotate character towards MOUSE POSITION ------------ (Melee Attack)
-        else if (combatState.CurrentAction is CombatAction.Melee)
-        {
-            targetRotation = Quaternion.LookRotation(combatState.Target);
-            transform.rotation = targetRotation;
-        }
-        // Rotate character towards DIRECTION OF MOVEMENT ----- (Basic Movement)
-        else if (_requestedMovement.sqrMagnitude > 0f)
+        
+        if (_requestedMovement.sqrMagnitude > 0f)
         {
             targetRotation = Quaternion.LookRotation(_requestedMovement);
         }
-        // No Rotation ---------------------------------------- (No Action)
         else
         {
             targetRotation = Quaternion.LookRotation(transform.forward);
@@ -196,7 +174,8 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
-    // Public Methods used by other classes to influence Player movement
+
+    #region Public Methods used by other classes to INFLUENCE PLAYER MOVEMENT
     public void EnableMovementInput() => _movementInputEnabled = true;
     public void DisableMovementInput()
     {
@@ -207,8 +186,6 @@ public class PlayerMovement : MonoBehaviour
         _requestedMovement = _state.Velocity = Vector3.zero;
         _state.CurrentAction = MovementAction.Idle;
     }
-    
-    // Velocity Getter/Setter
     public void SetVelocity(Vector3 velocity, float acceleration)
     {
         _state.Velocity = Vector3.Lerp
@@ -218,8 +195,8 @@ public class PlayerMovement : MonoBehaviour
             1f - Mathf.Exp(-acceleration * Time.deltaTime)
         );
     }
-    public Vector3 GetVelocity() => _state.Velocity;
     public void ResetVelocity() => _state.Velocity = Vector3.zero;
+    #endregion
 
     // State Getters
     public MovementState GetState() => _state;

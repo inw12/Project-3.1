@@ -14,7 +14,7 @@ public class PlayerAnimationController : MonoBehaviour
 {
     [Header("Components Requiring Animation Control")]
     [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private PlayerCombat playerCombat;
+    //[SerializeField] private PlayerCombat playerCombat;
 
     private Animator _animator;
 
@@ -30,13 +30,13 @@ public class PlayerAnimationController : MonoBehaviour
 
         // Initialize Animator Values
         _animator.SetInteger("MovementAction", (int)playerMovement.GetState().CurrentAction);
-        _animator.SetInteger("CombatAction", (int)playerCombat.GetState().CurrentAction);
+        //_animator.SetInteger("CombatAction", (int)playerCombat.GetState().CurrentAction);
     }
 
     public void UpdateAnimation()
     {
         _movementState = playerMovement.GetState();
-        _combatState = playerCombat.GetState();
+        //_combatState = playerCombat.GetState();
 
 
         // * Velocity (x/y)
