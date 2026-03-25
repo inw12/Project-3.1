@@ -510,7 +510,6 @@ MonoBehaviour:
   cameraRotation: {x: 30, y: 0, z: 0}
   zoomMin: 30
   zoomMax: 80
-  padding: 100
 --- !u!1 &720147185
 GameObject:
   m_ObjectHideFlags: 0
@@ -1375,6 +1374,6 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 824463753}
   - {fileID: 1606205926}
+  - {fileID: 1604337491}
   - {fileID: 9144034031301940212}
   - {fileID: 1935789515}
-  - {fileID: 1604337491}

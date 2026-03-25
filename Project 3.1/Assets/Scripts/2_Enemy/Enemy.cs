@@ -1,4 +1,24 @@
 using UnityEngine;
+public struct EnemyState
+{
+    public EnemyAction CurrentAction;       // what action is CURRENTLY happening
+    public EnemyAttackType CurrentAttack;   // what ATTACK is the enemy currently performing?
+}
+public enum EnemyAction
+{
+    Idle    = 0,
+    Move    = 1,
+    Attack  = 2,
+    Stagger = 3
+}
+public enum EnemyAttackType
+{
+    None            = 0,
+    Ranged          = 1,
+    FocusedRanged   = 2,
+    Melee           = 3,
+    Zone            = 4
+}
 public class Enemy : MonoBehaviour
 {
     public static Enemy Instance { get; private set; }
@@ -7,6 +27,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private EnemyHurtbox hurtbox;
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float maxDefense = 100f;
 
     private float _timeScale;
 
