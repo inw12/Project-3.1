@@ -506,10 +506,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 157d25f3c24c844b0bd58d80493cad38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::TrackingCamera
-  cameraPosition: {x: 0, y: 12.5, z: -15}
+  cameraPosition: {x: 0, y: 12.5, z: -17.5}
   cameraRotation: {x: 30, y: 0, z: 0}
   zoomMin: 30
   zoomMax: 80
+  padding: 100
 --- !u!1 &720147185
 GameObject:
   m_ObjectHideFlags: 0
