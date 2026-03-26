@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &52403336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 52403337}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &52403337
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52403336}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1801069991}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &70864317
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,7 +569,7 @@ PrefabInstance:
       objectReference: {fileID: 70864319}
     - target: {fileID: 2619991119023986173, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: maxDefense
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5065784582821254656, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: m_Name
@@ -621,6 +652,37 @@ Transform:
   - {fileID: 1560960790}
   - {fileID: 1330705393}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &733874316
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 733874317}
+  m_Layer: 0
+  m_Name: Enemy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &733874317
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733874316}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1801069991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &824463752
 GameObject:
@@ -860,7 +922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad3178adc873e4261a012155c5369bf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::BehindPlayerCamera
-  cameraPosition: {x: 2.25, y: 1, z: -4}
+  cameraPosition: {x: 2, y: 1, z: -4}
   cameraRotation: {x: -5, y: -15, z: 0}
 --- !u!1 &1330705392
 GameObject:
@@ -904,7 +966,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1330705392}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: 629100a86b7154caf8b3b6de9009e4b6, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -924,6 +986,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ace38a4c20a7404b98cab19197d2fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::CutsceneSequencer
+  playerPos: {fileID: 52403337}
+  enemyPos: {fileID: 733874317}
 --- !u!1 &1494680470
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,6 +1050,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1494680471}
+  - {fileID: 1801069991}
   m_Father: {fileID: 726813807}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1560960791
@@ -1002,7 +1067,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::CombatManager
   enemy: {fileID: 1786625547}
   enemySpawn: {fileID: 1494680471}
+  phaseChangeThreshold: 0.25
   cutsceneSequencer: {fileID: 1330705395}
+  cutscene: {fileID: 11400000, guid: 629100a86b7154caf8b3b6de9009e4b6, type: 2}
 --- !u!1 &1604337490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1124,6 +1191,39 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5065784582821254656, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
   m_PrefabInstance: {fileID: 723633022}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1801069990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1801069991}
+  m_Layer: 0
+  m_Name: Parry Phase Positions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1801069991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801069990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 52403337}
+  - {fileID: 733874317}
+  m_Father: {fileID: 1560960790}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2016430191
 GameObject:
   m_ObjectHideFlags: 0

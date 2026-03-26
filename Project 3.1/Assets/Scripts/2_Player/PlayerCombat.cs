@@ -185,6 +185,7 @@ public class PlayerCombat : MonoBehaviour
     {
         _combatInputEnabled = _requestedMelee = _requestedParry = _requestedRanged = false;
     } 
+    public void ExitCombatState() => _state.CurrentAction = CombatAction.None;
 
     // State Getters
     public CombatState GetState() => _state;

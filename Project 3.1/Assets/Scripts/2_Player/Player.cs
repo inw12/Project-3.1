@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     private Vector3 _mousePosition;     // world position relative to mouse position on-screen
 
     private bool _inputsEnabled;
+    private bool _parryInputEnabled;
 
     void Awake()
     {
@@ -51,36 +52,33 @@ public class Player : MonoBehaviour
     // * Record Player Input
     void Update()       
     {
-        if (_inputsEnabled)
+        // Mark world position relative to mouse position on screen
+        Ray cursorPosition = Camera.main.ScreenPointToRay(_inputActions.Movement.MousePosition.ReadValue<Vector2>());
+        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
-            // Mark world position relative to mouse position on screen
-            Ray cursorPosition = Camera.main.ScreenPointToRay(_inputActions.Movement.MousePosition.ReadValue<Vector2>());
-            if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer))
-            {
-                _mousePosition = hit.point;
-            }
-
-            // Read Movement Input
-            var moveInputActions = _inputActions.Movement;
-            var movementInput = new MovementInput
-            {
-                Movement        = moveInputActions.Move.ReadValue<Vector2>(),
-                Dodge           = moveInputActions.Dodge.WasPressedThisFrame(),
-                MousePosition   = _mousePosition
-            };
-            playerMovement.UpdateInput(movementInput);
-
-            // Read Combat Input
-            var combatInputActions = _inputActions.Combat;
-            var combatInput = new CombatInput
-            {
-                Ranged          = combatInputActions.RangedAttack.IsPressed(),
-                Melee           = combatInputActions.MeleeAttack.WasPressedThisFrame(),
-                Parry           = combatInputActions.Parry.WasPressedThisFrame(),
-                MousePosition   = _mousePosition
-            };
-            playerCombat.UpdateInput(combatInput);
+            _mousePosition = hit.point;
         }
+
+        // Read Movement Input
+        var moveInputActions = _inputActions.Movement;
+        var movementInput = new MovementInput
+        {
+            Movement        = _inputsEnabled ? moveInputActions.Move.ReadValue<Vector2>() : Vector2.zero,
+            Dodge           = _inputsEnabled && moveInputActions.Dodge.WasPressedThisFrame(),
+            MousePosition   = _inputsEnabled ? _mousePosition : Vector3.zero
+        };
+        playerMovement.UpdateInput(movementInput);
+
+        // Read Combat Input
+        var combatInputActions = _inputActions.Combat;
+        var combatInput = new CombatInput
+        {
+            Ranged          = _inputsEnabled && combatInputActions.RangedAttack.IsPressed(),
+            Melee           = _inputsEnabled && combatInputActions.MeleeAttack.WasPressedThisFrame(),
+            Parry           = (_inputsEnabled || _parryInputEnabled) && combatInputActions.Parry.WasPressedThisFrame(),
+            MousePosition   = _inputsEnabled ? _mousePosition : Vector3.zero
+        };
+        playerCombat.UpdateInput(combatInput);
     }
 
     // Debug Gizmos
@@ -118,6 +116,19 @@ public class Player : MonoBehaviour
         _inputActions.Dispose();
     }
 
-    public void EnablePlayerInput() => _inputsEnabled = true;
-    public void DisablePlayerInput() => _inputsEnabled = false;
+    public void EnablePlayerInput()
+    {
+        _inputsEnabled = true;
+    }
+    public void DisablePlayerInput() 
+    {
+        _inputsEnabled = false;
+        _parryInputEnabled = false;
+        playerMovement.Stop();
+        playerCombat.ExitCombatState();
+    }
+    public void EnableParryInput()
+    {
+        _parryInputEnabled = true;
+    }
 }

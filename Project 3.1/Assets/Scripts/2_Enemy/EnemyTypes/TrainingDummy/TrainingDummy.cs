@@ -17,28 +17,31 @@ public class TrainingDummy : Enemy
         var deltaTime = Time.deltaTime * _timeScale;
         hitFeedback.UpdateModel(deltaTime);
 
-        if (_cooldownTimer >= attackCooldown)
+        if (_enemyActive)
         {
-            _state = EnemyState.Attack;
-            _cooldownTimer = 0f;
-        }
-
-        if (_state is EnemyState.Attack)
-        {
-            if (!_attackSelected)
+            if (_cooldownTimer >= attackCooldown)
             {
-                _attackSelected = true;
-                _currentAttack = attacks[Random.Range(0, attacks.Length - 1)];
+                _state = EnemyState.Attack;
+                _cooldownTimer = 0f;
             }
 
-            if (_currentAttack)
+            if (_state is EnemyState.Attack)
             {
-                _currentAttack.Attack();
+                if (!_attackSelected)
+                {
+                    _attackSelected = true;
+                    _currentAttack = attacks[Random.Range(0, attacks.Length - 1)];
+                }
+
+                if (_currentAttack)
+                {
+                    _currentAttack.Attack();
+                }
             }
-        }
-        else
-        {
-            _cooldownTimer += deltaTime;
+            else
+            {
+                _cooldownTimer += deltaTime;
+            }
         }
     }
 

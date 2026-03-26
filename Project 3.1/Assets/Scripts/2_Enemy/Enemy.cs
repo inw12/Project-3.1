@@ -27,6 +27,8 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     protected bool _inHitstun;
     protected bool _isAlive;
 
+    protected bool _enemyActive;
+
     protected bool _requestedPhaseChange;
 
     #region *--- Interface Variables --------------------*
@@ -52,6 +54,8 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         _timeScale = 1;
         _hurtbox = GetComponent<CapsuleCollider>();
         _inHitstun = false;
+
+        _enemyActive = true;
 
         _state = EnemyState.Idle;
         _prevState = _state;
@@ -128,4 +132,11 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     {
         _state = EnemyState.Idle;
     }
+
+    public void ActivateEnemyAI() => _enemyActive = true;
+    public void DeactivateEnemyAI()
+    {
+        SetToIdle();
+        _enemyActive = false;
+    } 
 }
