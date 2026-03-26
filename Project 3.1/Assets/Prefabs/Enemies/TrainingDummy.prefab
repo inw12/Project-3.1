@@ -229,7 +229,7 @@ MonoBehaviour:
   hitFeedback: {fileID: 2821314353902609222}
   attacks:
   - {fileID: 2469317636124159511}
-  attackCooldown: 3
+  attackCooldown: 3.5
 --- !u!114 &2821314353902609222
 MonoBehaviour:
   m_ObjectHideFlags: 0
