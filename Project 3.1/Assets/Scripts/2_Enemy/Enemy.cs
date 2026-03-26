@@ -120,4 +120,9 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     #endregion
 
     public virtual void SetTimeScale(float timeScale) => _timeScale = timeScale;
+
+    public void SetToIdle() 
+    {
+        _state = EnemyState.Idle;
+    }
 }

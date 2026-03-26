@@ -31,7 +31,7 @@ public abstract class EnemyAttack : MonoBehaviour
     protected virtual void OnParryboxHit() {}   
 
     // Called in 'Update()' in 'Enemy.cs'
-    public abstract void Attack(Transform target);  
+    public abstract void Attack();  
 
     public virtual void Cancel() {}
 
