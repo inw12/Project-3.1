@@ -23,8 +23,9 @@ public class CombatManager : MonoBehaviour
     void Update()
     {
         var enemyDefense = _enemy.CurrentDefense / _enemy.MaxDefense;
-        if (enemyDefense < phaseChangeThreshold)
+        if (enemyDefense < phaseChangeThreshold && !_phaseChangeTriggered)
         {
+            _phaseChangeTriggered = true;
             cutsceneSequencer.PlayFinisher(enemy, cutscene);
             EnterParryPhase();
         }
