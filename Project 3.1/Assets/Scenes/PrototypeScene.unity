@@ -520,6 +520,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::DefaultCamera
   cameraPosition: {x: 0, y: 12.5, z: -15}
   cameraRotation: {x: 30, y: 0, z: 0}
+--- !u!1001 &723633022
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2469317636124159511, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: projectilePool
+      value: 
+      objectReference: {fileID: 8797307911038995540}
+    - target: {fileID: 2469317636124159511, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: extraProjectilePool
+      value: 
+      objectReference: {fileID: 70864319}
+    - target: {fileID: 5065784582821254656, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_Name
+      value: TrainingDummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6470847217584384728, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
 --- !u!1 &726813806
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,6 +935,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::CombatManager
   enemy: {fileID: 5065784582821254656, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
   enemySpawn: {fileID: 1494680471}
+  phaseChangeThreshold: 0.25
 --- !u!1 &1604337490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,3 +1299,4 @@ SceneRoots:
   - {fileID: 1604337491}
   - {fileID: 9144034031301940212}
   - {fileID: 726813807}
+  - {fileID: 723633022}

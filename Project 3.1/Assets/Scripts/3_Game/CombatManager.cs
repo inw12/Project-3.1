@@ -11,6 +11,6 @@ public class CombatManager : MonoBehaviour
 
     void Awake()
     {
-        _enemy = Instantiate(enemy, enemySpawn).GetComponent<Enemy>();
+        //_enemy = Instantiate(enemy, enemySpawn).GetComponent<Enemy>();
     }
 }
