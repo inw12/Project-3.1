@@ -1114,11 +1114,11 @@ MonoBehaviour:
   dashDuration: 0.1
   targetedDashSpeedMultiplier: 1.5
   comboBuffer: 0.33
-  hitstunDuration: 0.1
+  hitstunDuration: 0.125
   animationController: {fileID: 7767103367595275973}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 1536
   melee1Hitbox: {fileID: 3885068725202724606}
   melee2Hitbox: {fileID: 8660097824694729992}
   melee3Hitbox: {fileID: 8079366867556764606}

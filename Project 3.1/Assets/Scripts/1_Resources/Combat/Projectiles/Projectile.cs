@@ -4,7 +4,6 @@ public abstract class Projectile : MonoBehaviour, IHitbox
     [SerializeField] protected float hitboxRadius;
     [Space]
     [SerializeField] protected LayerMask hitLayers;
-    public LayerMask HittableLayers => hitLayers;
 
     protected ProjectileStats _stats;
 
@@ -94,7 +93,7 @@ public abstract class Projectile : MonoBehaviour, IHitbox
             transform.position,
             hitboxRadius,
             _hits,
-            HittableLayers
+            hitLayers
         );
 
         // Handle hit if detected

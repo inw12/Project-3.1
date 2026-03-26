@@ -1,8 +1,6 @@
 using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] [Range(1, 3)] private int startingState = 1;
-    [Space]
     [SerializeField] private Camera mainCamera;
     [Space]
     [SerializeField] private float positionLerpSpeed = 5f;
@@ -21,18 +19,7 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
-        switch(startingState)
-        {
-            case 2:
-                SwitchTo<TrackingCamera>();
-                break;
-            case 3:
-                SwitchTo<BehindPlayerCamera>();
-                break;
-            default:
-                SwitchTo<DefaultCamera>();
-                break;
-        }
+        SwitchTo<DefaultCamera>();
     }
 
     void LateUpdate()

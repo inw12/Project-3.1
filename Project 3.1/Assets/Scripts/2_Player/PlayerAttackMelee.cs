@@ -140,10 +140,19 @@ public class PlayerAttackMelee : MonoBehaviour
                 animationController.UpdateMeleeAnimation(_hitstunActive);
 
                 var hit = _meleeHits[0];
-                if (hit.TryGetComponent(out IDamageable e) && hit.TryGetComponent(out IHitstunnable h))
+
+                // 1. Apply Damage
+                if (hit.TryGetComponent(out IEnemyHealth e))
                 {
                     e.DecreaseHealth(damage);
-                    h.TriggerHitstun(hitstunDuration);
+
+                    // 2. Try applying hitstun
+                    if (hit.TryGetComponent(out IHitstunnable h)) 
+                        h.TriggerHitstun(hitstunDuration);
+
+                    // 3. Try applying knockback
+
+                    // 4. Disable Hitbox
                     _hitboxActive = false;
                 }
             }

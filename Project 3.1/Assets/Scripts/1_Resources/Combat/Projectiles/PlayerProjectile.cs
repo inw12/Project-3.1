@@ -17,4 +17,13 @@ public class PlayerProjectile : Projectile
             _pool.Release(gameObject);
         }
     }
+
+    public override void OnHit(Collider other)
+    {
+        if (other.gameObject.TryGetComponent(out IEnemyHealth e))
+        {
+            e.DecreaseHealth(_stats.Damage);
+            _pool.Release(gameObject);
+        }
+    }
 }

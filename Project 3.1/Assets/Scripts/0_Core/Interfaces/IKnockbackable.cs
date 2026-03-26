@@ -1,6 +1,5 @@
 using UnityEngine;
 public interface IKnockbackable
 {
-    CharacterController CharacterController { get; }
-    void Knockback(float amount, float duration);
+    void Knockback(Vector3 direction, float amount, float duration);
 }

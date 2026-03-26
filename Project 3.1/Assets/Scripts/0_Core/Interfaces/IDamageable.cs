@@ -4,10 +4,12 @@
 ///     - Have a "death effect" once HP reaches 0
 public interface IDamageable
 {
-    float MaxHealth { get; }
+    float MaxHealth     { get; }
     float CurrentHealth { get; }
+
+    bool IsAlive        { get; }
 
     void DecreaseHealth(float amount);
     void IncreaseHealth(float amount);
-    void Death();
+    void OnDeath();
 }

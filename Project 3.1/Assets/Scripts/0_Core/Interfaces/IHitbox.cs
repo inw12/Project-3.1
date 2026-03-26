@@ -4,6 +4,5 @@
 using UnityEngine;
 public interface IHitbox
 {
-    LayerMask HittableLayers { get; }
     void OnHit(Collider other);
 }
