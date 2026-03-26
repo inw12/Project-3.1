@@ -1,5 +1,12 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
+public enum EnemyState
+{
+    Idle,
+    Move,
+    Attack,
+    Stagger
+}
 [RequireComponent(typeof(CharacterController), typeof(CapsuleCollider))]
 public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnockbackable
 {
@@ -10,6 +17,9 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     [SerializeField] protected float moveSpeed = 10f;
     protected float _currentHealth;
     protected float _currentDefense;
+
+    protected EnemyState _state;
+    protected EnemyState _prevState;
 
     protected float _timeScale;
     protected CapsuleCollider _hurtbox;
@@ -39,6 +49,9 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         _timeScale = 1;
         _hurtbox = GetComponent<CapsuleCollider>();
         _inHitstun = false;
+
+        _state = EnemyState.Idle;
+        _prevState = _state;
     }
 
     protected virtual void Update()
@@ -90,8 +103,12 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     private IEnumerator HitstunRoutine(float duration)
     {
         _timeScale = 0f;
+        _inHitstun = true;
+        _state = EnemyState.Stagger;
         yield return new WaitForSeconds(duration);
         _timeScale = 1f;
+        _inHitstun = false;
+        _state = EnemyState.Idle;
     }
     #endregion
 

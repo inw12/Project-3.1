@@ -1,6 +1,5 @@
 /// * Objects that:
-///     - Scan for collisions against 'IDamageable' objects
-///     - Trigger 'IDamageable' methods to affect object's HP value
+///     - Collide with other objects to deal damage
 using UnityEngine;
 public interface IHitbox
 {
