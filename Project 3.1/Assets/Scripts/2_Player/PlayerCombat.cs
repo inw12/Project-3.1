@@ -27,6 +27,8 @@ public class PlayerCombat : MonoBehaviour
     ///     - StateMachineBehavior scripts          (to syncronize animations & input)
     public static PlayerCombat Instance { get; private set; }
 
+    [SerializeField] private PlayerAnimationController animationController;
+
     private PlayerAttackRanged _rangedAttack;
     private PlayerAttackMelee _meleeAttack;
     private PlayerParry _parry;
@@ -43,8 +45,9 @@ public class PlayerCombat : MonoBehaviour
     private CombatState _state;
     private CombatState _prevState;
 
-    // Melee Attack Stuff
+    // One-Time Trigger Controllers
     private bool _meleeStarted; // used to trigger the first hit of the melee attack combo
+    private bool _parryStarted; // used to trigger parry animation parameter
 
     void Awake()
     {
@@ -76,6 +79,7 @@ public class PlayerCombat : MonoBehaviour
         // Initialize Combat Actions
         _rangedAttack.Initialize();
         _meleeAttack.Initialize();
+        _parry.Initialize();
 
         _meleeStarted = false;
     }
@@ -130,10 +134,10 @@ public class PlayerCombat : MonoBehaviour
                 break;
         };    
 
-        //if (_prevState.CurrentAction != _state.CurrentAction)
-        //{
-        //    Debug.Log(_state.CurrentAction);
-        //}
+        if (_prevState.CurrentAction != _state.CurrentAction)
+        {
+            Debug.Log(_state.CurrentAction);
+        }
 
         // Update previous state
         _prevState = _state;
@@ -141,7 +145,13 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnParry()
     {
-        
+        if (!_parryStarted)
+        {
+            _parryStarted = true;
+            PlayerMovement.Instance.DisableMovementInput();
+            animationController.SetParryInputTrigger();
+        }
+        _parry.UpdateParry(ref _state, ref _parryStarted);
     }
     private void OnMeleeAttack(float deltaTime)
     {

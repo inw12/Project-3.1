@@ -1,16 +1,25 @@
 using UnityEngine;
-
 public class PlayerParry : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private float parryDuration = 0.2f;
+    private float _parryTimer;
+
+    public void Initialize()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateParry(ref CombatState state, ref bool parryStarted)
     {
-        
+        if (parryStarted)
+        {
+            _parryTimer += Time.deltaTime;
+            if (_parryTimer >= parryDuration)
+            {
+                parryStarted = false;
+                state.CurrentAction = CombatAction.None;
+                _parryTimer = 0f;
+            }
+        }
     }
 }

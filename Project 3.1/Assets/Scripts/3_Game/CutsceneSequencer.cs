@@ -20,6 +20,7 @@ public class CutsceneSequencer : MonoBehaviour
     public void PlayFinisher(GameObject enemy, TimelineAsset asset)
     {
         Player.Instance.DisablePlayerInput();
+        Player.Instance.EnableParryInput();
         if (enemy.TryGetComponent(out Enemy e))
         {
             e.DeactivateEnemyAI();
