@@ -12,7 +12,6 @@ public class TrainingDummyHitFeedback : MonoBehaviour
 
     [Header("Scale Pulse")]
     [SerializeField] private float pulseAmount = 0.15f;
-    [SerializeField] private float shrinkSpeed = 25f;
     [SerializeField] private float growSpeed = 25f;
     private Vector3 _defaultScale;
     private Vector3 _scaleOffset;
