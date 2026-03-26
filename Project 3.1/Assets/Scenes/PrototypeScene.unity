@@ -536,6 +536,10 @@ PrefabInstance:
       propertyPath: extraProjectilePool
       value: 
       objectReference: {fileID: 70864319}
+    - target: {fileID: 2619991119023986173, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: maxDefense
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 5065784582821254656, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: m_Name
       value: TrainingDummy
@@ -615,6 +619,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1560960790}
+  - {fileID: 1330705393}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &824463752
@@ -857,6 +862,68 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::BehindPlayerCamera
   cameraPosition: {x: 2.25, y: 1, z: -4}
   cameraRotation: {x: -5, y: -15, z: 0}
+--- !u!1 &1330705392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1330705393}
+  - component: {fileID: 1330705394}
+  - component: {fileID: 1330705395}
+  m_Layer: 0
+  m_Name: CutsceneSequencer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1330705393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330705392}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 726813807}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &1330705394
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330705392}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 0}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings: []
+  m_ExposedReferences:
+    m_References: []
+--- !u!114 &1330705395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330705392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ace38a4c20a7404b98cab19197d2fd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::CutsceneSequencer
 --- !u!1 &1494680470
 GameObject:
   m_ObjectHideFlags: 0
@@ -933,9 +1000,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d585664c08c4fb085657dfef44f157, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::CombatManager
-  enemy: {fileID: 5065784582821254656, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+  enemy: {fileID: 1786625547}
   enemySpawn: {fileID: 1494680471}
-  phaseChangeThreshold: 0.25
+  phaseChangeThreshold: 0.3
+  cutsceneSequencer: {fileID: 1330705395}
 --- !u!1 &1604337490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1052,6 +1120,11 @@ Transform:
   - {fileID: 1193239776}
   m_Father: {fileID: 1604337491}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1786625547 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5065784582821254656, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+  m_PrefabInstance: {fileID: 723633022}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2016430191
 GameObject:
   m_ObjectHideFlags: 0

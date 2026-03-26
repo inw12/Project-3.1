@@ -12,8 +12,9 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 {
     [Header("Stats")]
     [SerializeField] protected float maxHealth = 50f;
-    [SerializeField] protected float maxDefense = 100f;
-    [SerializeField] [Range(0f, 1f)] protected float damageReduction = 0.5f;
+    [SerializeField] protected float maxDefense = 50f;
+    [SerializeField] [Range(0f, 1f)] protected float damageReduction = 0.75f;
+    [SerializeField] [Range(0f, 1f)] private float phaseChangeThreshold = 0.25f;
     [SerializeField] protected float moveSpeed = 10f;
     protected float _currentHealth;
     protected float _currentDefense;
@@ -25,6 +26,8 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     protected CapsuleCollider _hurtbox;
     protected bool _inHitstun;
     protected bool _isAlive;
+
+    protected bool _requestedPhaseChange;
 
     #region *--- Interface Variables --------------------*
     // HP

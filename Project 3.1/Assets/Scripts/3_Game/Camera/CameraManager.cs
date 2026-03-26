@@ -1,20 +1,25 @@
 using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
+    public static CameraManager Instance { get; private set; }
+
     [SerializeField] private Camera mainCamera;
     [Space]
     [SerializeField] private float positionLerpSpeed = 5f;
     [SerializeField] private float rotationLerpSpeed = 5f;
 
-    private CameraState[] _states;
     private CameraState _currentState;
-
-    private float _timeScale;
 
     void Awake()
     {
-        _states = GetComponentsInChildren<CameraState>();
-        _timeScale = 1f;
+        // Singleton Initialization
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -24,7 +29,7 @@ public class CameraManager : MonoBehaviour
 
     void LateUpdate()
     {
-        var deltaTime = Time.deltaTime * _timeScale;
+        var deltaTime = Time.deltaTime;
 
         if (!_currentState) return;
         

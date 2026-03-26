@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     private PlayerInput _inputActions;
     private Vector3 _mousePosition;     // world position relative to mouse position on-screen
 
+    private bool _inputsEnabled;
+
     void Awake()
     {
         // Singleton Initialization
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         // Player Input
+        _inputsEnabled = true;
         _inputActions = new PlayerInput();
         _inputActions.Enable();
 
@@ -48,33 +51,36 @@ public class Player : MonoBehaviour
     // * Record Player Input
     void Update()       
     {
-        // Mark world position relative to mouse position on screen
-        Ray cursorPosition = Camera.main.ScreenPointToRay(_inputActions.Movement.MousePosition.ReadValue<Vector2>());
-        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer))
+        if (_inputsEnabled)
         {
-            _mousePosition = hit.point;
+            // Mark world position relative to mouse position on screen
+            Ray cursorPosition = Camera.main.ScreenPointToRay(_inputActions.Movement.MousePosition.ReadValue<Vector2>());
+            if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer))
+            {
+                _mousePosition = hit.point;
+            }
+
+            // Read Movement Input
+            var moveInputActions = _inputActions.Movement;
+            var movementInput = new MovementInput
+            {
+                Movement        = moveInputActions.Move.ReadValue<Vector2>(),
+                Dodge           = moveInputActions.Dodge.WasPressedThisFrame(),
+                MousePosition   = _mousePosition
+            };
+            playerMovement.UpdateInput(movementInput);
+
+            // Read Combat Input
+            var combatInputActions = _inputActions.Combat;
+            var combatInput = new CombatInput
+            {
+                Ranged          = combatInputActions.RangedAttack.IsPressed(),
+                Melee           = combatInputActions.MeleeAttack.WasPressedThisFrame(),
+                Parry           = combatInputActions.Parry.WasPressedThisFrame(),
+                MousePosition   = _mousePosition
+            };
+            playerCombat.UpdateInput(combatInput);
         }
-
-        // Read Movement Input
-        var moveInputActions = _inputActions.Movement;
-        var movementInput = new MovementInput
-        {
-            Movement        = moveInputActions.Move.ReadValue<Vector2>(),
-            Dodge           = moveInputActions.Dodge.WasPressedThisFrame(),
-            MousePosition   = _mousePosition
-        };
-        playerMovement.UpdateInput(movementInput);
-
-        // Read Combat Input
-        var combatInputActions = _inputActions.Combat;
-        var combatInput = new CombatInput
-        {
-            Ranged          = combatInputActions.RangedAttack.IsPressed(),
-            Melee           = combatInputActions.MeleeAttack.WasPressedThisFrame(),
-            Parry           = combatInputActions.Parry.WasPressedThisFrame(),
-            MousePosition   = _mousePosition
-        };
-        playerCombat.UpdateInput(combatInput);
     }
 
     // Debug Gizmos
@@ -111,4 +117,7 @@ public class Player : MonoBehaviour
     {
         _inputActions.Dispose();
     }
+
+    public void EnablePlayerInput() => _inputsEnabled = true;
+    public void DisablePlayerInput() => _inputsEnabled = false;
 }
