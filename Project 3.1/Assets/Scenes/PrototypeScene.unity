@@ -1002,7 +1002,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::CombatManager
   enemy: {fileID: 1786625547}
   enemySpawn: {fileID: 1494680471}
-  phaseChangeThreshold: 0.3
   cutsceneSequencer: {fileID: 1330705395}
 --- !u!1 &1604337490
 GameObject:
@@ -1371,5 +1370,5 @@ SceneRoots:
   - {fileID: 1606205926}
   - {fileID: 1604337491}
   - {fileID: 9144034031301940212}
-  - {fileID: 726813807}
   - {fileID: 723633022}
+  - {fileID: 726813807}

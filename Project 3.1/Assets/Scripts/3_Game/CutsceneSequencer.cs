@@ -1,16 +1,12 @@
 using UnityEngine;
-
+using UnityEngine.Playables;
+[RequireComponent(typeof(PlayableDirector))]
 public class CutsceneSequencer : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private PlayableDirector _playableDirector;
+
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _playableDirector = GetComponent<PlayableDirector>();
     }
 }
