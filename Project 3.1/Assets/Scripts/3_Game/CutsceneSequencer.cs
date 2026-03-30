@@ -37,7 +37,7 @@ public class CutsceneSequencer : MonoBehaviour
     private void PositionCharacters(GameObject enemy)
     {
         // Place the Singleton player at their spawn point
-        Player.Instance.transform.SetPositionAndRotation(
+        Player.Instance.SetPositionAndRotation(
             playerPos.position,
             playerPos.rotation
         );

@@ -1076,6 +1076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6af0bc6120a4480583162d1e9c42099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerCombat
+  animationController: {fileID: 7767103367595275973}
 --- !u!114 &6501891967276764438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1136,6 +1137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49908c2b376e64eae9ae2359ca693c18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerParry
+  parryDuration: 0.2
 --- !u!1 &3798144818343577512
 GameObject:
   m_ObjectHideFlags: 0

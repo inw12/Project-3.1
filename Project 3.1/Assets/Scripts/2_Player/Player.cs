@@ -125,10 +125,16 @@ public class Player : MonoBehaviour
         _inputsEnabled = false;
         _parryInputEnabled = false;
         playerMovement.Stop();
+        playerMovement.CharacterControllerActive(false);
         playerCombat.ExitCombatState();
     }
     public void EnableParryInput()
     {
         _parryInputEnabled = true;
     }
+
+    // Position & Rotation
+    public void SetPosition(Vector3 position) => transform.position = position;
+    public void SetRotation(Quaternion rotation) => transform.rotation = rotation;
+    public void SetPositionAndRotation(Vector3 position, Quaternion rotation) => transform.SetPositionAndRotation(position, rotation);
 }

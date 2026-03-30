@@ -1,3 +1,8 @@
+/// * Listens for phase change signal sent by enemy after DEF reaches a certain amount
+/// * Upon phase change:
+///     - Disable Enemy AI
+///     - Trigger Enemy Animation
+///     - Trigger cutscene via 'CutsceneSequencer'
 using UnityEngine;
 using UnityEngine.Timeline;
 public class CombatManager : MonoBehaviour
@@ -26,8 +31,8 @@ public class CombatManager : MonoBehaviour
         if (enemyDefense < phaseChangeThreshold && !_phaseChangeTriggered)
         {
             _phaseChangeTriggered = true;
-            cutsceneSequencer.PlayFinisher(enemy, cutscene);
             EnterParryPhase();
+            cutsceneSequencer.PlayFinisher(enemy, cutscene);
         }
     }
 

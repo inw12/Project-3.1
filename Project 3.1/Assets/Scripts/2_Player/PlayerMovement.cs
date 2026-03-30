@@ -158,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Apply Movement
-        _controller.Move(_state.Velocity * fixedDeltaTime);
+        if (_controller.enabled) _controller.Move(_state.Velocity * fixedDeltaTime);
 
         // Update State Machine
         _prevState = _state;
@@ -181,9 +181,7 @@ public class PlayerMovement : MonoBehaviour
         // Do Nothing
         // (Melee Attack; rotation directly affected from 'PlayerAttackMelee.cs')
         else if (playerCombat.GetState().CurrentAction is CombatAction.Melee)
-        {
-            
-        }
+        {}
         // Rotate towards direction of movement
         // (Normal Movement)
         else if (_requestedMovement.sqrMagnitude > 0f)
@@ -221,6 +219,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Stop() => _state.Velocity = Vector3.zero;
     public void SetRotation(Quaternion rotation) => transform.rotation = rotation;
+    public void CharacterControllerActive(bool b) => _controller.enabled = b;
     #endregion
 
     // State Getters
