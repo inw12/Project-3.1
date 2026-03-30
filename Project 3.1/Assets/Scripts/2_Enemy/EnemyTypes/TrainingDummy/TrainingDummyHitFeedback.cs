@@ -19,7 +19,7 @@ public class TrainingDummyHitFeedback : MonoBehaviour
     void Start()
     {
         // Emission
-        if (model.TryGetComponent(out MeshRenderer mesh))
+        if (model.TryGetComponent(out SkinnedMeshRenderer mesh))
         {
             _material = mesh.material;
         }
