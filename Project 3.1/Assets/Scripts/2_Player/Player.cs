@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerCombat playerCombat;
+    [SerializeField] private PlayerHurtbox playerHurtbox;
+    [SerializeField] private PlayerParrybox playerParrybox;
     [Space]
     [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private PlayerAnimationRig animationRig;
@@ -46,6 +48,8 @@ public class Player : MonoBehaviour
         // Player Actions
         playerMovement.Initialize();
         playerCombat.Initialize(hurtbox, parrybox);
+        playerHurtbox.Initialize();
+        playerParrybox.Initialize(animationController);
 
         // Character Animations
         animationController.Initialize();

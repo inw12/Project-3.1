@@ -128,7 +128,7 @@ MonoBehaviour:
   hitboxRadius: 1.7
   hitLayers:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 384
   burstProjectileCount: 40
   burstProjectileSpeedMultiplier: 1.35
   trackingStrength: 0.5

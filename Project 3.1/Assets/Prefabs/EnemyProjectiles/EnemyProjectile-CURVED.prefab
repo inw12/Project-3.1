@@ -128,5 +128,5 @@ MonoBehaviour:
   hitboxRadius: 1.4
   hitLayers:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 384
   curveAngle: 35

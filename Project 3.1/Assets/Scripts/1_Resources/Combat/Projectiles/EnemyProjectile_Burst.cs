@@ -2,7 +2,7 @@
 ///     - Lightly tracks target location
 ///     - Spawns basic projectiles in a circle shooting outward
 using UnityEngine;
-public class EnemyProjectile_Burst : Projectile
+public class EnemyProjectile_Burst : EnemyProjectile
 {
     [Header("Burst Effect")]
     [SerializeField] private int burstProjectileCount;

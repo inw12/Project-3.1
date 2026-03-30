@@ -1,6 +1,6 @@
 /// * Projectile travels along a curve with given angle *
 using UnityEngine;
-public class EnemyProjectile_Curved : Projectile
+public class EnemyProjectile_Curved : EnemyProjectile
 {
     [SerializeField] private float curveAngle;
 

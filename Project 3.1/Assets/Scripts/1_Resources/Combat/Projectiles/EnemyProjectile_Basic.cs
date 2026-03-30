@@ -1,6 +1,6 @@
 /// * A straight-flying projectile owned by Enemy *
 using UnityEngine;
-public class EnemyProjectile_Basic : Projectile
+public class EnemyProjectile_Basic : EnemyProjectile
 {
     protected override void Move()
     {
