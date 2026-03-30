@@ -22,8 +22,9 @@ public class PlayerParrybox : MonoBehaviour, IParry
         animationController.ParryActive(b);
     }
 
-    public void Parry()
+    public void TriggerParry()
     {
+        SetParryActive(false);
         animationController.ParryTrigger();
     }
 

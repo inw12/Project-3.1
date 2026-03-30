@@ -35,7 +35,7 @@ public abstract class EnemyProjectile : Projectile
     {
         if (other.gameObject.TryGetComponent(out IParry e))
         {
-            e.Parry();
+            e.TriggerParry();
             _pool.Release(gameObject);
         }
     }   

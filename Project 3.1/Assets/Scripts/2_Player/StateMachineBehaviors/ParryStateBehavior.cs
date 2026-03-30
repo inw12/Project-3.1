@@ -21,18 +21,20 @@ public class ParryStateBehavior : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // Update frame counter
         _currentFrame = Mathf.FloorToInt(stateInfo.normalizedTime % 1f * _totalFrames);
+
+        // Exit animation state if frame count > '_activeParryFrames'
         if (_currentFrame >= _activeParryFrames)
         {
-            animator.SetBool("ParryActive", false);
             animator.Play("Parry - END");
-            PlayerCombat.Instance.ExitCombatState();
         }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _currentFrame = 0;
+
         animator.SetBool("ParryActive", false);
         PlayerCombat.Instance.ExitCombatState();
     }

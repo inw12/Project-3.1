@@ -149,7 +149,7 @@ public class PlayerCombat : MonoBehaviour
             _parryStarted = true;
 
             PlayerMovement.Instance.DisableMovementInput();
-            SetParryActive(true);
+            ParryActive(true);
         }
     }
     private void OnMeleeAttack(float deltaTime)
@@ -208,7 +208,7 @@ public class PlayerCombat : MonoBehaviour
     public void EnableMeleeHitbox() => _meleeAttack.EnableMeleeHitbox();
     public void DisableMeleeHitbox() => _meleeAttack.DisableMeleeHitbox();
 
-    public void SetParryActive(bool b) => _parrybox.SetParryActive(b);
+    public void ParryActive(bool b) => _parrybox.SetParryActive(b);
 
     public int GetParryFrames() => _parrybox.GetParryFrames();
     #endregion
