@@ -26,9 +26,8 @@ public class Player : MonoBehaviour
     private bool _inputsEnabled;
     private bool _parryInputEnabled;
 
-    void Awake()
+    void Awake()    // Singleton Initialization
     {
-        // Singleton Initialization
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -38,35 +37,35 @@ public class Player : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
+    void Start()    // Component Initialization
     {
         // Player Input
         _inputsEnabled = true;
         _inputActions = new PlayerInput();
         _inputActions.Enable();
 
-        // Player Actions
-        playerMovement.Initialize();
-        playerCombat.Initialize(hurtbox, parrybox);
-        playerHurtbox.Initialize();
-        playerParrybox.Initialize(animationController);
-
         // Character Animations
         animationController.Initialize();
         animationRig.Initialize();
+
+        // Player Hurtbox/Parrybox
+        playerHurtbox.Initialize();
+        playerParrybox.Initialize();
+
+        // Player Actions
+        playerMovement.Initialize();
+        playerCombat.Initialize(hurtbox, parrybox);
     }
 
-    // * Record Player Input
-    void Update()       
+    void Update()   // Record Player Input
     {
-        // Mark world position relative to mouse position on screen
+        // Mouse Position in world space
         Ray cursorPosition = Camera.main.ScreenPointToRay(_inputActions.Movement.MousePosition.ReadValue<Vector2>());
-        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer))
-        {
+        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer)) {
             _mousePosition = hit.point;
         }
 
-        // Read Movement Input
+        // Movement Input
         var moveInputActions = _inputActions.Movement;
         var movementInput = new MovementInput
         {
@@ -76,7 +75,7 @@ public class Player : MonoBehaviour
         };
         playerMovement.UpdateInput(movementInput);
 
-        // Read Combat Input
+        // Combat Input
         var combatInputActions = _inputActions.Combat;
         var combatInput = new CombatInput
         {
@@ -123,9 +122,12 @@ public class Player : MonoBehaviour
         _inputActions.Dispose();
     }
 
+    // Input Enable/Disable
     public void EnablePlayerInput()
     {
         _inputsEnabled = true;
+        _parryInputEnabled = true;
+        playerMovement.CharacterControllerActive(true);
     }
     public void DisablePlayerInput() 
     {

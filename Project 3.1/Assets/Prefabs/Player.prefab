@@ -297,6 +297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7647580420618331462}
   - component: {fileID: 7041147594141494943}
+  - component: {fileID: 4858735577551974677}
   m_Layer: 7
   m_Name: Hurtbox
   m_TagString: Untagged
@@ -342,6 +343,19 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &4858735577551974677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610512607050853196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594a09c8ec9e34fe8a08c1ec4d6629d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerHurtbox
+  maxHealth: 10
 --- !u!1 &1687542261000359021
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,6 +642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4557975811779111161}
   - component: {fileID: 6097932818581489313}
+  - component: {fileID: 832098212645733646}
   m_Layer: 8
   m_Name: Parrybox
   m_TagString: Untagged
@@ -673,6 +688,21 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &832098212645733646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2294892507963470283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c9b3816450254614ace91ad24b93687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerParrybox
+  activeParryFrames: 5
+  animationController: {fileID: 7767103367595275973}
+  hurtbox: {fileID: 7041147594141494943}
 --- !u!1 &2334244860903841906
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,7 +1060,6 @@ GameObject:
   - component: {fileID: 659642308282448799}
   - component: {fileID: 6501891967276764438}
   - component: {fileID: 55354276240820591}
-  - component: {fileID: 4934762821648068288}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1095,6 +1124,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerMovement: {fileID: 4712341509815855531}
   playerCombat: {fileID: 659642308282448799}
+  playerHurtbox: {fileID: 4858735577551974677}
+  playerParrybox: {fileID: 832098212645733646}
   animationController: {fileID: 7767103367595275973}
   animationRig: {fileID: 2444470431042664471}
   groundLayer:
@@ -1183,19 +1214,6 @@ MonoBehaviour:
   melee3Hitbox: {fileID: 8079366867556764606}
   hitboxRadius: 1.5
   hitboxOffset: 1
---- !u!114 &4934762821648068288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3784538819646688819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49908c2b376e64eae9ae2359ca693c18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Player::PlayerParry
-  parryDuration: 0.2
 --- !u!1 &3798144818343577512
 GameObject:
   m_ObjectHideFlags: 0

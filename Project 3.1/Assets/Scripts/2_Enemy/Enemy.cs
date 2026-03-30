@@ -30,7 +30,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     protected bool _inHitstun;
     protected bool _isAlive;
 
-    protected bool _enemyActive;
+    public bool _enemyActive;
 
     protected bool _requestedPhaseChange;
 
@@ -58,7 +58,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         _hurtbox = GetComponent<CapsuleCollider>();
         _inHitstun = false;
 
-        _enemyActive = true;
+        //_enemyActive = true;
 
         _state = EnemyState.Idle;
         _prevState = _state;

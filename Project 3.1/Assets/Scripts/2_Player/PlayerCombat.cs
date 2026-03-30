@@ -19,7 +19,7 @@ public struct CombatInput
     public Vector3 MousePosition;
 }
 
-[RequireComponent(typeof(PlayerAttackRanged), typeof(PlayerAttackMelee), typeof(PlayerParry))]
+[RequireComponent(typeof(PlayerAttackRanged), typeof(PlayerAttackMelee))]
 public class PlayerCombat : MonoBehaviour
 {
     /// * Referenced by:
@@ -27,11 +27,12 @@ public class PlayerCombat : MonoBehaviour
     ///     - StateMachineBehavior scripts          (to syncronize animations & input)
     public static PlayerCombat Instance { get; private set; }
 
+    [SerializeField] private PlayerParrybox parrybox;
+    [Space]
     [SerializeField] private PlayerAnimationController animationController;
 
     private PlayerAttackRanged _rangedAttack;
     private PlayerAttackMelee _meleeAttack;
-    private PlayerParry _parry;
 
     private CapsuleCollider _hurtbox;
     private CapsuleCollider _parrybox;
@@ -69,10 +70,15 @@ public class PlayerCombat : MonoBehaviour
         // Initialize Combat Scripts
         _rangedAttack = GetComponent<PlayerAttackRanged>();
         _meleeAttack = GetComponent<PlayerAttackMelee>();
-        _parry = GetComponent<PlayerParry>();
 
         // Enable Combat Inputs
         _combatInputEnabled = true;
+
+        // Hurtbox/Parrybox
+        _hurtbox = hurtbox;
+        _parrybox = parrybox;
+        this.parrybox.Initialize();
+        SetParryActive(false);
 
         // State Machine Initialization
         _state.CurrentAction = CombatAction.None;
@@ -82,10 +88,6 @@ public class PlayerCombat : MonoBehaviour
         // Initialize Combat Actions
         _rangedAttack.Initialize();
         _meleeAttack.Initialize();
-        _parry.Initialize();
-
-        _hurtbox = hurtbox;
-        _parrybox = parrybox;
 
         _meleeStarted = false;
     }
@@ -140,6 +142,7 @@ public class PlayerCombat : MonoBehaviour
                 break;
         };    
 
+        // Debug Message (state change)
         if (_prevState.CurrentAction != _state.CurrentAction)
         {
             Debug.Log(_state.CurrentAction);
@@ -154,10 +157,10 @@ public class PlayerCombat : MonoBehaviour
         if (!_parryStarted)
         {
             _parryStarted = true;
+
             PlayerMovement.Instance.DisableMovementInput();
-            animationController.SetParryInputTrigger();
+            SetParryActive(true);
         }
-        _parry.UpdateParry(ref _state, ref _parryStarted);
     }
     private void OnMeleeAttack(float deltaTime)
     {
@@ -201,7 +204,11 @@ public class PlayerCombat : MonoBehaviour
     {
         _combatInputEnabled = _requestedMelee = _requestedParry = _requestedRanged = false;
     } 
-    public void ExitCombatState() => _state.CurrentAction = CombatAction.None;
+    public void ExitCombatState() 
+    {
+        _state.CurrentAction = CombatAction.None;
+        _parryStarted = false;
+    }
 
     // State Getters
     public CombatState GetState() => _state;
@@ -211,10 +218,11 @@ public class PlayerCombat : MonoBehaviour
     public void EnableMeleeHitbox() => _meleeAttack.EnableMeleeHitbox();
     public void DisableMeleeHitbox() => _meleeAttack.DisableMeleeHitbox();
 
-    public void ParryboxActive(bool b)
+    public void SetParryActive(bool b)
     {
-        _hurtbox.enabled = !b;
-        _parrybox.enabled = b;
+        parrybox.SetParryActive(b);
+        animationController.ParryActive(b);
     }
+    public int GetParryFrames() => parrybox.GetParryFrames();
     #endregion
 }

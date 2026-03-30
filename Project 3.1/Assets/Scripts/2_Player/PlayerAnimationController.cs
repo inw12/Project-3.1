@@ -1,15 +1,15 @@
 using UnityEngine;
 /// ******************************
 /// * Animator Metrics:
-///     - xVelocity
-///     - yVelocity
-///     - MovementAction
-///     - CombatAction
-///     - MeleeTrigger
-///     - ComboCount
-///     - HitstunActive
-///     - ParryInputTrigger
-///     - ParryEffectTrigger
+///     - xVelocity             (float)
+///     - yVelocity             (float)
+///     - MovementAction        (int)
+///     - CombatAction          (int)
+///     - MeleeTrigger          (Trigger)
+///     - ComboCount            (int)
+///     - HitstunActive         (bool)
+///     - ParryActive           (bool)
+///     - ParryTrigger          (Trigger)
 /// ******************************
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimationController : MonoBehaviour
@@ -73,6 +73,6 @@ public class PlayerAnimationController : MonoBehaviour
         _animator.SetBool("HitstunActive", hitstunActive);
     }
 
-    public void SetParryInputTrigger() => _animator.SetTrigger("ParryInputTrigger");
-    public void SetParryEffectTrigger() => _animator.SetTrigger("ParryEffectTrigger");
+    public void ParryActive(bool b) => _animator.SetBool("ParryActive", b);
+    public void ParryTrigger() => _animator.SetTrigger("ParryTrigger");
 }

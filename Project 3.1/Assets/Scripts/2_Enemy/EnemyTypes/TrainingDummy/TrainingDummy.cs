@@ -1,7 +1,6 @@
 using UnityEngine;
 public class TrainingDummy : Enemy
 {
-    [Space]
     [SerializeField] private TrainingDummyHitFeedback hitFeedback;
     [Space]
     [SerializeField] private EnemyAttack[] attacks;
