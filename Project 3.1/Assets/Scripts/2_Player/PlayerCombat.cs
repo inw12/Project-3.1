@@ -33,6 +33,9 @@ public class PlayerCombat : MonoBehaviour
     private PlayerAttackMelee _meleeAttack;
     private PlayerParry _parry;
 
+    private CapsuleCollider _hurtbox;
+    private CapsuleCollider _parrybox;
+
     private bool _combatInputEnabled;
 
     // Requested Inputs
@@ -61,7 +64,7 @@ public class PlayerCombat : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void Initialize()
+    public void Initialize(CapsuleCollider hurtbox, CapsuleCollider parrybox)
     {
         // Initialize Combat Scripts
         _rangedAttack = GetComponent<PlayerAttackRanged>();
@@ -80,6 +83,9 @@ public class PlayerCombat : MonoBehaviour
         _rangedAttack.Initialize();
         _meleeAttack.Initialize();
         _parry.Initialize();
+
+        _hurtbox = hurtbox;
+        _parrybox = parrybox;
 
         _meleeStarted = false;
     }
@@ -204,5 +210,11 @@ public class PlayerCombat : MonoBehaviour
     #region StateMachineBehavior Methods
     public void EnableMeleeHitbox() => _meleeAttack.EnableMeleeHitbox();
     public void DisableMeleeHitbox() => _meleeAttack.DisableMeleeHitbox();
+
+    public void ParryboxActive(bool b)
+    {
+        _hurtbox.enabled = !b;
+        _parrybox.enabled = b;
+    }
     #endregion
 }

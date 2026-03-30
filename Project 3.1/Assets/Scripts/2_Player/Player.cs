@@ -14,6 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerAnimationRig animationRig;
     [Space]
     [SerializeField] private LayerMask groundLayer;
+    [Space]
+    [SerializeField] private CapsuleCollider hurtbox;
+    [SerializeField] private CapsuleCollider parrybox;
     
     private PlayerInput _inputActions;
     private Vector3 _mousePosition;     // world position relative to mouse position on-screen
@@ -42,7 +45,7 @@ public class Player : MonoBehaviour
 
         // Player Actions
         playerMovement.Initialize();
-        playerCombat.Initialize();
+        playerCombat.Initialize(hurtbox, parrybox);
 
         // Character Animations
         animationController.Initialize();
