@@ -14,10 +14,13 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     [SerializeField] protected float maxHealth = 50f;
     [SerializeField] protected float maxDefense = 50f;
     [SerializeField] [Range(0f, 1f)] protected float damageReduction = 0.75f;
-    [SerializeField] [Range(0f, 1f)] private float phaseChangeThreshold = 0.25f;
     [SerializeField] protected float moveSpeed = 10f;
     protected float _currentHealth;
     protected float _currentDefense;
+
+    [Header("Combat Phase Transition")]
+    [SerializeField] [Range(0f, 1f)] private float phaseChangeThreshold = 0.25f;
+    [SerializeField] protected Signal phaseChangeSignal;
 
     protected EnemyState _state;
     protected EnemyState _prevState;
@@ -80,6 +83,12 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         // Clamp values
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
         _currentDefense = Mathf.Clamp(_currentDefense, 0f, maxDefense);
+
+        // Determine if Combat Phase Transition needed
+        if (_currentDefense / maxDefense <= phaseChangeThreshold)
+        {
+            phaseChangeSignal.Raise();
+        }
 
         Debug.Log("HP: " + _currentHealth);
         Debug.Log("DEF: " + _currentDefense);

@@ -12,33 +12,19 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Transform enemySpawn;
     private Enemy _enemy;
 
-    [Header("Combat Variables")]
-    [SerializeField] [Range(0f, 1f)] private float phaseChangeThreshold = 0.25f;    // % of DEF the enemy has before changing combat states
-
     [Header("Cutscene Components")]
     [SerializeField] private CutsceneSequencer cutsceneSequencer;
     [SerializeField] private TimelineAsset cutscene;
-    private bool _phaseChangeTriggered;
 
     void Start()
     {
         _enemy = enemy.GetComponent<Enemy>();
     }
 
-    void Update()
-    {
-        var enemyDefense = _enemy.CurrentDefense / _enemy.MaxDefense;
-        if (enemyDefense < phaseChangeThreshold && !_phaseChangeTriggered)
-        {
-            _phaseChangeTriggered = true;
-            EnterParryPhase();
-            cutsceneSequencer.PlayFinisher(enemy, cutscene);
-        }
-    }
-
-    void EnterParryPhase()
+    public void EnterParryPhase()
     {
         CameraManager.Instance.SwitchTo<BehindPlayerCamera>();
+        cutsceneSequencer.PlayFinisher(enemy, cutscene);
     }
 
     void ExitParryPhase()

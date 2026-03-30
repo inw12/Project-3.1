@@ -223,8 +223,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Enemy::TrainingDummy
   maxHealth: 50
-  maxDefense: 50
+  maxDefense: 10
   damageReduction: 0.9
+  phaseChangeThreshold: 0.25
   moveSpeed: 10
   hitFeedback: {fileID: 2821314353902609222}
   attacks:
