@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 public enum EnemyState
 {
-    Idle,
-    Move,
-    Attack,
-    Stagger
+    Idle    = 0,
+    Move    = 1,
+    Attack  = 2,
+    Stagger = 3
 }
 [RequireComponent(typeof(CharacterController), typeof(CapsuleCollider))]
 public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnockbackable
