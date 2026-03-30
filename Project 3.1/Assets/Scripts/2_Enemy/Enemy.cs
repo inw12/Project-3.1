@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
-public enum EnemyState
+public struct EnemyState
+{
+    public EnemyAction CurrentAction;
+    public bool AttackActive;
+}
+public enum EnemyAction
 {
     Idle    = 0,
     Move    = 1,
@@ -60,7 +65,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
         //_enemyActive = true;
 
-        _state = EnemyState.Idle;
+        _state.CurrentAction = EnemyAction.Idle;
         _prevState = _state;
     }
 
@@ -120,11 +125,11 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     {
         _timeScale = 0f;
         _inHitstun = true;
-        _state = EnemyState.Stagger;
+        _state.CurrentAction = EnemyAction.Stagger;
         yield return new WaitForSeconds(duration);
         _timeScale = 1f;
         _inHitstun = false;
-        _state = EnemyState.Idle;
+        _state.CurrentAction = EnemyAction.Idle;
     }
     #endregion
 
@@ -137,9 +142,9 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
     public virtual void SetTimeScale(float timeScale) => _timeScale = timeScale;
 
-    public void SetToIdle() 
+    public virtual void SetToIdle() 
     {
-        _state = EnemyState.Idle;
+        _state.CurrentAction = EnemyAction.Idle;
     }
 
     public void ActivateEnemyAI() => _enemyActive = true;
@@ -147,5 +152,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     {
         SetToIdle();
         _enemyActive = false;
-    } 
+    }
+
+    public void AttackActive(bool b) => _state.AttackActive = b;
 }

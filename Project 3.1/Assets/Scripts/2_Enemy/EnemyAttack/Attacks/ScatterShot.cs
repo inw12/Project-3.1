@@ -4,9 +4,11 @@ public class ScatterShot : EnemyRangedAttack
     [Space]
     [SerializeField] protected float duration;
     private float _durationTimer;
+
     [Header("Num of Projectiles per Attack")]
     [SerializeField] private int min = 1;
     [SerializeField] private int max = 3;
+
     [Header("AoE Burst")]
     [SerializeField] protected float burstProjectileSpeed;
     [SerializeField] protected float burstRange;

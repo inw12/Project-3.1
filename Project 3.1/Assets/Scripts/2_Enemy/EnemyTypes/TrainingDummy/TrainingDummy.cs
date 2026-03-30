@@ -2,6 +2,7 @@ using UnityEngine;
 public class TrainingDummy : Enemy
 {
     [SerializeField] private TrainingDummyHitFeedback hitFeedback;
+    [SerializeField] private TrainingDummyAnimationController animationController;
     [Space]
     [SerializeField] private EnemyAttack[] attacks;
     [SerializeField] private float attackCooldown;
@@ -20,19 +21,19 @@ public class TrainingDummy : Enemy
         {
             if (_cooldownTimer >= attackCooldown)
             {
-                _state = EnemyState.Attack;
+                _state.CurrentAction = EnemyAction.Attack;
                 _cooldownTimer = 0f;
             }
 
-            if (_state is EnemyState.Attack)
+            if (_state.CurrentAction is EnemyAction.Attack)
             {
                 if (!_attackSelected)
                 {
                     _attackSelected = true;
-                    _currentAttack = attacks[Random.Range(0, attacks.Length - 1)];
+                    if (attacks.Length > 0) _currentAttack = attacks[Random.Range(0, attacks.Length - 1)];
                 }
 
-                if (_currentAttack)
+                if (_currentAttack && _state.AttackActive)
                 {
                     _currentAttack.Attack();
                 }
@@ -42,6 +43,17 @@ public class TrainingDummy : Enemy
                 _cooldownTimer += deltaTime;
             }
         }
+    }
+
+    void LateUpdate()
+    {
+        animationController.UpdateAnimation(ref _state);
+    }
+
+    public override void SetToIdle()
+    {
+        base.SetToIdle();
+
     }
 
     public override void DecreaseHealth(float amount)
