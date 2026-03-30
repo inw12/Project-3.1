@@ -572,6 +572,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2619991119023986173, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: _enemyActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619991119023986173, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: phaseChangeSignal
       value: 
       objectReference: {fileID: 11400000, guid: c80713b0913164d2eb43e941155b5a69, type: 2}
@@ -1484,6 +1488,10 @@ PrefabInstance:
     - target: {fileID: 38948473767687928, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 832098212645733646, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
+      propertyPath: activeParryFrames
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3784538819646688819, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: m_Name

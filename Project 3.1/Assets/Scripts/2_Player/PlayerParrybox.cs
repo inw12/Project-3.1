@@ -24,7 +24,8 @@ public class PlayerParrybox : MonoBehaviour, IParry
 
     public void TriggerParry()
     {
-        SetParryActive(false);
+        _parrybox.enabled = false;
+        hurtbox.enabled = true;
         animationController.ParryTrigger();
     }
 
