@@ -8,12 +8,11 @@ public class PlayerParrybox : MonoBehaviour, IParry
     [SerializeField] private CapsuleCollider hurtbox;
     private CapsuleCollider _parrybox;
 
-
     public void Initialize()
     {
         // Capsule Collider Initialization
         _parrybox = GetComponent<CapsuleCollider>();
-        _parrybox.enabled = false;
+        SetParryActive(false);
     }
 
     public void SetParryActive(bool b)

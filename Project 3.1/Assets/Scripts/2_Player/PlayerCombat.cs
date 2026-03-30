@@ -27,15 +27,9 @@ public class PlayerCombat : MonoBehaviour
     ///     - StateMachineBehavior scripts          (to syncronize animations & input)
     public static PlayerCombat Instance { get; private set; }
 
-    [SerializeField] private PlayerParrybox parrybox;
-    [Space]
-    [SerializeField] private PlayerAnimationController animationController;
-
     private PlayerAttackRanged _rangedAttack;
     private PlayerAttackMelee _meleeAttack;
-
-    private CapsuleCollider _hurtbox;
-    private CapsuleCollider _parrybox;
+    private PlayerParrybox _parrybox;
 
     private bool _combatInputEnabled;
 
@@ -65,7 +59,7 @@ public class PlayerCombat : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void Initialize(CapsuleCollider hurtbox, CapsuleCollider parrybox)
+    public void Initialize(PlayerParrybox parrybox)
     {
         // Initialize Combat Scripts
         _rangedAttack = GetComponent<PlayerAttackRanged>();
@@ -73,12 +67,6 @@ public class PlayerCombat : MonoBehaviour
 
         // Enable Combat Inputs
         _combatInputEnabled = true;
-
-        // Hurtbox/Parrybox
-        _hurtbox = hurtbox;
-        _parrybox = parrybox;
-        this.parrybox.Initialize();
-        SetParryActive(false);
 
         // State Machine Initialization
         _state.CurrentAction = CombatAction.None;
@@ -88,6 +76,8 @@ public class PlayerCombat : MonoBehaviour
         // Initialize Combat Actions
         _rangedAttack.Initialize();
         _meleeAttack.Initialize();
+
+        _parrybox = parrybox;
 
         _meleeStarted = false;
     }
@@ -218,11 +208,8 @@ public class PlayerCombat : MonoBehaviour
     public void EnableMeleeHitbox() => _meleeAttack.EnableMeleeHitbox();
     public void DisableMeleeHitbox() => _meleeAttack.DisableMeleeHitbox();
 
-    public void SetParryActive(bool b)
-    {
-        parrybox.SetParryActive(b);
-        animationController.ParryActive(b);
-    }
-    public int GetParryFrames() => parrybox.GetParryFrames();
+    public void SetParryActive(bool b) => _parrybox.SetParryActive(b);
+
+    public int GetParryFrames() => _parrybox.GetParryFrames();
     #endregion
 }

@@ -1131,8 +1131,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  hurtbox: {fileID: 7041147594141494943}
-  parrybox: {fileID: 6097932818581489313}
 --- !u!114 &4712341509815855531
 MonoBehaviour:
   m_ObjectHideFlags: 0
