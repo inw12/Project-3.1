@@ -18,13 +18,17 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
-        _enemy = enemy.GetComponent<Enemy>();
+        if (enemy)
+        {
+            _ = Instantiate(enemy, enemySpawn);
+            _enemy = enemy.GetComponent<Enemy>();
+        }
     }
 
     public void EnterParryPhase()
     {
         CameraManager.Instance.SwitchTo<BehindPlayerCamera>();
-        cutsceneSequencer.PlayFinisher(enemy, cutscene);
+        if (enemy) cutsceneSequencer.PlayFinisher(enemy, cutscene);
     }
 
     void ExitParryPhase()
