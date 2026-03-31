@@ -1257,9 +1257,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: moveSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: moveAcceleration
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: stateChangeCooldown
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2025891571817784993, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: m_Name
       value: TrainingDummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5174979723301954193, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8151491236625680448, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: m_LocalPosition.x

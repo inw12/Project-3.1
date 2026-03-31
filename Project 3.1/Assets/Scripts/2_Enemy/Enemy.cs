@@ -17,6 +17,7 @@ public struct EnemyState
 
     public EnemyAction CurrentAction;
     public int CurrentAttack;
+    public Vector3 MovementTarget;
 
     public bool InHitstun;
     public bool IsKnockable;
@@ -45,7 +46,8 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
     [SerializeField] protected float maxHealth = 100f;
     [SerializeField] protected float maxDefense = 50f;
     [SerializeField] [Range(0f, 1f)] protected float defenseDamageReduction = 0.9f;
-    [SerializeField] protected float moveSpeed = 10f;
+    [Space]
+    [SerializeField] protected float moveSpeed = 5f;
 
     [Header("Parry Phase Trigger")]
     [SerializeField] [Range(0f, 1f)] protected float combatTransitionThreshold = 0.25f;
@@ -72,6 +74,9 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
 
     // Local TimeScale
     protected float _timeScale;
+
+    // RigidBody
+    protected Rigidbody _rb;
 
     // 'IEnemyHealth' Variables
     public float MaxHealth => maxHealth;
@@ -110,6 +115,7 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
         // Enemy Component Initialization
         animationController.Initialize();
         hurtbox.Initialize(_state.CurrentHealth, _state.CurrentDefense, defenseDamageReduction);
+        _rb = GetComponent<Rigidbody>();
 
         _timeScale = 1f;
     }
@@ -122,7 +128,8 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
         hurtbox.UpdateState(ref _state);
 
         // Check for combat phase transition
-        if (_state.CurrentDefense / maxDefense <= combatTransitionThreshold) {
+        if (_state.CurrentDefense / maxDefense <= combatTransitionThreshold)
+        {
             transitionSignal.Raise();
         }
 
@@ -130,6 +137,13 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
         _cooldownTimer += deltaTime;
         if (_cooldownTimer >= stateChangeCooldown)
         {
+            // Random movement target
+            var target = Random.insideUnitSphere * 25;
+            target = Vector3.ProjectOnPlane(target, Vector3.up);
+            _state.MovementTarget = target;
+
+            _state.CurrentAction = EnemyAction.Move;
+
             _cooldownTimer = 0f;
         }
     }
@@ -158,7 +172,38 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
 
     protected virtual void FixedUpdate()
     {
-        
+        var deltaTime = Time.fixedDeltaTime * _timeScale;
+
+        // Enemy Movement
+        if (_state.CurrentAction is EnemyAction.Move)
+        {
+            if (_rb.position == _state.MovementTarget)
+            {
+                _state.CurrentAction = EnemyAction.Idle;
+                return;
+            }
+
+            // Rotate towards movement target
+            var direction = (_state.MovementTarget - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
+            transform.rotation = Quaternion.LookRotation(direction);
+
+            // Calculate amount to move this frame
+            var next = Vector3.MoveTowards
+            (
+                _rb.position,
+                _state.MovementTarget,
+                1f - Mathf.Exp(-moveSpeed * deltaTime)
+            );
+
+            // Apply movement
+            _rb.MovePosition(next);
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        if (_state.MovementTarget != Vector3.zero) Gizmos.DrawSphere(_state.MovementTarget, 0.66f);
     }
 
     protected virtual void TryEnterNewState()
