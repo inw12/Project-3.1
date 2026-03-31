@@ -12,6 +12,7 @@ using UnityEngine;
 public struct EnemyState
 {
     public EnemyAction CurrentAction;
+    public int CurrentAttack;
 }
 public enum EnemyAction
 {
@@ -38,13 +39,22 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     [Space]
     [SerializeField] protected float moveSpeed = 10f;
 
+    [Header("Parry Phase Trigger")]
+    [SerializeField] [Range(0f, 1f)] protected float combatTransitionThreshold = 0.25f;
+    [SerializeField] protected Signal transitionSignal;
+
+    [Header("Animations")]
+    [SerializeField] protected EnemyAnimationController animationController;
+
     [Header("Knockback/Knockdown Settings")]
     [SerializeField] protected float knockbackAmount;
     [SerializeField] protected float knockdownDuration;
 
-    [Header("Parry Phase Trigger")]
-    [SerializeField] [Range(0f, 1f)] protected float combatTransitionThreshold = 0.25f;
-    [SerializeField] protected Signal transitionSignal;
+    [Header("Attacks")]
+    [SerializeField] protected EnemyAttack[] rangedAttacks;
+    [SerializeField] protected EnemyAttack[] focusAttacks;
+    [SerializeField] protected EnemyAttack[] meleeAttacks;
+    [SerializeField] protected EnemyAttack[] zoneAttacks;
 
     // State Machine
     protected EnemyState _state;
@@ -82,6 +92,8 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         _state.CurrentAction = EnemyAction.Idle;
         _prevState = _state;
 
+
+
         _currentHealth = maxHealth;
         _currentDefense = maxDefense;
         _isAlive = _currentHealth > 0f;
@@ -104,6 +116,10 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     {
         
     }
+
+    protected virtual void Move() {}
+
+    protected virtual void Attack() {}
 
     #region *-- 'IEnemyHealth' Methods --------------------*
     public void DecreaseHealth(float amount)
