@@ -6,14 +6,20 @@
 /// * Child Class Responsibilities:
 ///     - "What kinds of attacks?"
 ///     - "How does this enemy move?"
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 public struct EnemyState
 {
+    public float CurrentHealth;
+    public float CurrentDefense;
+    public bool IsAlive;
+
     public EnemyAction CurrentAction;
     public int CurrentAttack;
+
     public bool InHitstun;
+    public bool IsKnockable;
 }
 public enum EnemyAction
 {
@@ -34,10 +40,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     [SerializeField] protected float maxHealth = 100f;
     [SerializeField] protected float maxDefense = 50f;
     [SerializeField] [Range(0f, 1f)] protected float defenseDamageReduction = 0.9f;
-    protected float _currentHealth;
-    protected float _currentDefense;
-    protected bool _isAlive;
-    [Space]
     [SerializeField] protected float moveSpeed = 10f;
 
     [Header("Parry Phase Trigger")]
@@ -52,6 +54,10 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     [SerializeField] protected float knockbackAmount;
     [SerializeField] protected float knockdownDuration;
 
+    [Header("State Machine Control")]
+    [SerializeField] protected float stateChangeCooldown = 5f;
+    protected float _cooldownTimer;
+
     [Header("Attacks")]
     [SerializeField] protected EnemyAttack[] rangedAttacks;
     [SerializeField] protected EnemyAttack[] focusAttacks;
@@ -62,17 +68,19 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     protected EnemyState _state;
     protected EnemyState _prevState;
 
+    // Local TimeScale
     protected float _timeScale;
 
-    protected bool _isKnockable;    // in a state where enemy can be either knocked back or knocked down
+    // Character Controller
+    protected CharacterController _controller;
 
     // 'IEnemyHealth' Variables
     public float MaxHealth => maxHealth;
-    public float CurrentHealth => _currentHealth;
+    public float CurrentHealth => _state.CurrentHealth;
     public float MaxDefense => maxDefense;
-    public float CurrentDefense => _currentDefense;
+    public float CurrentDefense => _state.CurrentDefense;
     public float DamageReduction => defenseDamageReduction;
-    public bool IsAlive => _isAlive;
+    public bool IsAlive => _state.IsAlive;
 
     // 'IHitstunnable' Variables
     public float TimeScale => _timeScale;
@@ -81,7 +89,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     // 'IKnockable' Variables
     public float KnockbackAmount => knockbackAmount;
     public float KnockdownDuration => knockdownDuration;
-    public bool IsKnockable => _isKnockable;
+    public bool IsKnockable => _state.IsKnockable;
 
     protected virtual void Awake()
     {
@@ -90,24 +98,34 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
     protected virtual void Start()
     {
+        // State Machine Initialization
+        _state.CurrentHealth = maxHealth;
+        _state.CurrentDefense = maxDefense;
+        _state.IsAlive = _state.CurrentHealth > 0f;
         _state.CurrentAction = EnemyAction.Idle;
         _state.CurrentAttack = 0;
         _state.InHitstun = false;
+        _state.IsKnockable = true;
         _prevState = _state;
 
+        // Enemy Component Initialization
         animationController.Initialize();
         hitFeedback.Initialize();
-
-        _currentHealth = maxHealth;
-        _currentDefense = maxDefense;
-        _isAlive = _currentHealth > 0f;
+        _controller = GetComponent<CharacterController>();
 
         _timeScale = 1f;
     }
 
     protected virtual void Update()
     {
-        
+        var deltaTime = Time.deltaTime * _timeScale;
+
+        // Update Timers
+        _cooldownTimer += deltaTime;
+        if (_cooldownTimer >= stateChangeCooldown)
+        {
+            _cooldownTimer = 0f;
+        }
     }
 
     protected virtual void LateUpdate()
@@ -119,6 +137,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         hitFeedback.UpdateEnemyModel(deltaTime);
 
         // Update State Machine
+        _state.IsKnockable = _state.CurrentAction is EnemyAction.Idle or EnemyAction.Move;
         _prevState = _state;
     }
 
@@ -127,8 +146,12 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         
     }
 
-    protected virtual void Move() {}
+    protected virtual void TryEnterNewState()
+    {
+        
+    }
 
+    protected virtual void Move() {}
     protected virtual void Attack() {}
 
     #region *-- 'IEnemyHealth' Methods --------------------*
@@ -139,28 +162,32 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         var amountToHealth = amount - amountToDefense;
 
         // Apply to DEF
-        _currentDefense -= amountToDefense;
-        _currentDefense = Mathf.Clamp(_currentDefense, 0f, maxDefense);
+        _state.CurrentDefense -= amountToDefense;
+        _state.CurrentDefense = Mathf.Clamp(_state.CurrentDefense, 0f, maxDefense);
 
         // Apply to HP
-        _currentHealth -= amountToHealth;
-        _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
+        _state.CurrentHealth -= amountToHealth;
+        _state.CurrentHealth = Mathf.Clamp(_state.CurrentHealth, 0f, maxHealth);
 
         // Check for death
-        _isAlive = _currentHealth > 0f;
+        _state.IsAlive = _state.CurrentHealth > 0f;
 
         // Trigger Hit Feedback
         hitFeedback.TriggerHitFeedback();
+
+        // Debug Message
+        Debug.Log("HP: " + _state.CurrentHealth + " / " + maxHealth);
+        Debug.Log("DEF: " + _state.CurrentDefense + " / " + maxDefense);
     }
     public void IncreaseDefense(float amount)
     {
-        _currentDefense += amount;
-        _currentDefense = Mathf.Clamp(_currentDefense, 0f, maxDefense);
+        _state.CurrentDefense += amount;
+        _state.CurrentDefense = Mathf.Clamp(_state.CurrentDefense, 0f, maxDefense);
     }
     public void IncreaseHealth(float amount)
     {
-        _currentHealth += amount;
-        _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
+        _state.CurrentHealth += amount;
+        _state.CurrentHealth = Mathf.Clamp(_state.CurrentHealth, 0f, maxHealth);
     }
     public void OnDeath() {}
     #endregion
