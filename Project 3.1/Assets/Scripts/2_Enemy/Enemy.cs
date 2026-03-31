@@ -135,8 +135,9 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
             transitionSignal.Raise();
         }
 
+
         // State Machine Control
-        _cooldownTimer += deltaTime;
+        if (_state.CurrentAction is EnemyAction.Idle) _cooldownTimer += deltaTime;
         if (_cooldownTimer >= stateChangeCooldown)
         {
             // Random movement target
@@ -146,16 +147,33 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
             //_state.CurrentAction = EnemyAction.Move;
 
             _state.CurrentAction = EnemyAction.AttackRanged;
-            var attackContext = new EnemyAttackContext
-            {
-                Enemy = this,
-                Origin = projectileSpawn,
-                ProjectilePool = projectilePools[0],
-                PlayerLayer = playerLayer
-            };
-            attacks[0].Attack(attackContext);
-
+            
             _cooldownTimer = 0f;
+        }
+
+        if (_state.CurrentAction is EnemyAction.AttackRanged)
+        {
+            _state.AttackActive = animationController.GetBool("AttackActive");
+
+            if (_state.AttackActive)
+            {
+                var attackContext = new EnemyAttackContext
+                {
+                    Enemy = this,
+                    Origin = projectileSpawn,
+                    ProjectilePool = projectilePools[0],
+                    PlayerLayer = playerLayer
+                };
+                var attack = attacks[0];
+                attack.Attack(attackContext);
+
+                if (!attack.attackActive)
+                {
+                    animationController.SetBool("AttackActive", false);
+                    _state.AttackActive = false;
+                    _state.CurrentAction = EnemyAction.Idle;
+                }
+            }
         }
     }
 
@@ -167,7 +185,7 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
         hurtbox.UpdateHitFeedback(deltaTime);
 
         // Update Animator
-        animationController.UpdateAnimator(_state);
+        animationController.UpdateAnimator(ref _state);
 
         // Debug Messages
         if (_state.CurrentHealth != _prevState.CurrentHealth || _state.CurrentDefense != _prevState.CurrentDefense)
@@ -247,6 +265,8 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
         throw new System.NotImplementedException();
     }
     #endregion
+
+    public EnemyState GetState() => _state;
 
     public void SetTimeScale(float t) => _timeScale = t;
 }

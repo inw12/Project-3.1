@@ -1258,6 +1258,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: stateChangeCooldown
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: 'projectilePools.Array.data[0]'
       value: 
       objectReference: {fileID: 8797307911038995540}
