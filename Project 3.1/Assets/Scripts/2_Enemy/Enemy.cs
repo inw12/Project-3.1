@@ -15,11 +15,13 @@ public struct EnemyState
     public float CurrentDefense;
     public bool IsAlive;
 
+    // Animation Control Variables
     public EnemyAction CurrentAction;
     public int CurrentAttack;
-    public Vector3 MovementTarget;
-
+    public bool AttackActive;
     public bool InHitstun;
+
+    public Vector3 MovementTarget;
     public bool IsKnockable;
 }
 public enum EnemyAction

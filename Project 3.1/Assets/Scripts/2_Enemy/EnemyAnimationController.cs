@@ -1,7 +1,8 @@
 /// =============================================================
 /// * ALL Enemies will have the following animator parameters:
 ///     - "CurrentAction"   (int)
-///     - "CurrentAttack"   (int)
+///     - "AttackID"   (int)
+///     - "AttackActive"    (bool)
 ///     - "InHitstun"       (bool)
 /// =============================================================
 using UnityEngine;
@@ -18,7 +19,8 @@ public class EnemyAnimationController : MonoBehaviour
     public void UpdateAnimator(EnemyState state)
     {
         _animator.SetInteger("CurrentAction", (int)state.CurrentAction);
-        _animator.SetInteger("CurrentAttack", state.CurrentAttack);
+        _animator.SetInteger("AttackID", state.CurrentAttack);
+        _animator.SetBool("AttackActive", state.AttackActive);
         _animator.SetBool("InHitstun", state.InHitstun);
     }
 }
