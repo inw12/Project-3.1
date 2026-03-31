@@ -63,7 +63,6 @@ public class ScatterShot : EnemyRangedAttack
 
         if (_durationTimer >= duration)
         {
-            enemy.SetToIdle();
             _durationTimer = 0f;
         }
     }

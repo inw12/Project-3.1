@@ -23,7 +23,7 @@ public class CutsceneSequencer : MonoBehaviour
         Player.Instance.EnableParryInput();
         if (enemy.TryGetComponent(out Enemy e))
         {
-            e.DeactivateEnemyAI();
+
         }
 
         // Snap both characters into position first
