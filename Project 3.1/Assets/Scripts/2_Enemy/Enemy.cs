@@ -62,11 +62,11 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
     protected float _cooldownTimer;
     protected EnemyAttack _requestedAttack;
 
-    [Header("Attacks")]
-    [SerializeField] protected EnemyAttack[] attacks;
-    [SerializeField] protected ProjectilePool basicProjectiles;
-    [SerializeField] protected Transform rangedAttackSpawn;
+    [Header("Attack Info")]
     [SerializeField] protected LayerMask playerLayer;
+    [SerializeField] protected Transform projectileSpawn;
+    [SerializeField] protected EnemyAttack[] attacks;
+    [SerializeField] protected ProjectilePool[] projectilePools;
 
     // State Machine
     protected EnemyState _state;
@@ -147,8 +147,8 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
             var attackContext = new EnemyAttackContext
             {
                 Enemy = this,
-                Origin = rangedAttackSpawn,
-                ProjectilePool = basicProjectiles,
+                Origin = projectileSpawn,
+                ProjectilePool = projectilePools[0],
                 PlayerLayer = playerLayer
             };
             attacks[0].Attack(attackContext);

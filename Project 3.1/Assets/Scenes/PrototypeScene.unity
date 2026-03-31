@@ -1258,9 +1258,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
-      propertyPath: basicProjectiles
+      propertyPath: 'projectilePools.Array.data[0]'
       value: 
       objectReference: {fileID: 8797307911038995540}
+    - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: 'projectilePools.Array.data[1]'
+      value: 
+      objectReference: {fileID: 70864319}
+    - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
+      propertyPath: 'projectilePools.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2016430193}
     - target: {fileID: 2025891571817784993, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: m_Name
       value: TrainingDummy

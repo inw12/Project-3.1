@@ -563,13 +563,16 @@ MonoBehaviour:
   knockbackAmount: 5
   knockdownDuration: 2
   stateChangeCooldown: 2.5
-  attacks:
-  - {fileID: 11400000, guid: 523501e530efc4cf8b1e079358caa4d0, type: 2}
-  basicProjectiles: {fileID: 0}
-  rangedAttackSpawn: {fileID: 4856594881060842087}
   playerLayer:
     serializedVersion: 2
     m_Bits: 384
+  projectileSpawn: {fileID: 4856594881060842087}
+  attacks:
+  - {fileID: 11400000, guid: 523501e530efc4cf8b1e079358caa4d0, type: 2}
+  projectilePools:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &2121290933846271806
 GameObject:
   m_ObjectHideFlags: 0
