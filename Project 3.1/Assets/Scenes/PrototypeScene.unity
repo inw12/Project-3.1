@@ -1258,13 +1258,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
-      propertyPath: attacks.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 624520292811982392, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
-      propertyPath: 'attacks.Array.data[0]'
+      propertyPath: basicProjectiles
       value: 
-      objectReference: {fileID: 11400000, guid: 523501e530efc4cf8b1e079358caa4d0, type: 2}
+      objectReference: {fileID: 8797307911038995540}
     - target: {fileID: 2025891571817784993, guid: 656f09d053d824945979d7fda35cff5e, type: 3}
       propertyPath: m_Name
       value: TrainingDummy

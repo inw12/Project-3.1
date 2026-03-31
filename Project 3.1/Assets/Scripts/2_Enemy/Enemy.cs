@@ -64,6 +64,9 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
 
     [Header("Attacks")]
     [SerializeField] protected EnemyAttack[] attacks;
+    [SerializeField] protected ProjectilePool basicProjectiles;
+    [SerializeField] protected Transform rangedAttackSpawn;
+    [SerializeField] protected LayerMask playerLayer;
 
     // State Machine
     protected EnemyState _state;
@@ -135,11 +138,20 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
         if (_cooldownTimer >= stateChangeCooldown)
         {
             // Random movement target
-            var target = Random.insideUnitSphere * 25;
-            target = Vector3.ProjectOnPlane(target, Vector3.up);
-            _state.MovementTarget = target;
+            //var target = Random.insideUnitSphere * 25;
+            //target = Vector3.ProjectOnPlane(target, Vector3.up);
+            //_state.MovementTarget = target;
+            //_state.CurrentAction = EnemyAction.Move;
 
-            _state.CurrentAction = EnemyAction.Move;
+            _state.CurrentAction = EnemyAction.AttackRanged;
+            var attackContext = new EnemyAttackContext
+            {
+                Enemy = this,
+                Origin = rangedAttackSpawn,
+                ProjectilePool = basicProjectiles,
+                PlayerLayer = playerLayer
+            };
+            attacks[0].Attack(attackContext);
 
             _cooldownTimer = 0f;
         }
