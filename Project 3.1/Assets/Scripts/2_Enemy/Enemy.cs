@@ -170,13 +170,14 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
         _prevState = _state;
     }
 
-    protected virtual void FixedUpdate()
+    protected virtual void FixedUpdate()    // Reserved for movement implementation
     {
         var deltaTime = Time.fixedDeltaTime * _timeScale;
 
-        // Enemy Movement
+        // Movement Implementation
         if (_state.CurrentAction is EnemyAction.Move)
         {
+            // If destination reached, exit movement state
             if (_rb.position == _state.MovementTarget)
             {
                 _state.CurrentAction = EnemyAction.Idle;
@@ -203,7 +204,7 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        if (_state.MovementTarget != Vector3.zero) Gizmos.DrawSphere(_state.MovementTarget, 0.66f);
+        if (_state.MovementTarget != Vector3.zero) Gizmos.DrawSphere(_state.MovementTarget, 0.5f);
     }
 
     protected virtual void TryEnterNewState()
