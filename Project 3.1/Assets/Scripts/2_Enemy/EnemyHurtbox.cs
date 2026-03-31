@@ -69,10 +69,6 @@ public class EnemyHurtbox : MonoBehaviour, IEnemyHealth
 
         // Trigger Hit Feedback
         if (hitFeedback) hitFeedback.TriggerHitFeedback();
-
-        // Debug Message
-        Debug.Log("HP: " + _currentHealth + " / " + _maxHealth);
-        Debug.Log("DEF: " + _currentDefense + " / " + _maxDefense);
     }
     public void IncreaseDefense(float amount)
     {

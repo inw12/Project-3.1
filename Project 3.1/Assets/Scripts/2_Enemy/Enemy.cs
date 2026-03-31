@@ -143,6 +143,13 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
         // Update Animator
         animationController.UpdateAnimator(_state);
 
+        // Debug Messages
+        if (_state.CurrentHealth != _prevState.CurrentHealth || _state.CurrentDefense != _prevState.CurrentDefense)
+        {
+            Debug.Log("HP: " + _state.CurrentHealth + " / " + maxHealth);
+            Debug.Log("DEF: " + _state.CurrentDefense + " / " + maxDefense);
+        }
+
         // Update State Machine
         _state.IsKnockable = _state.CurrentAction is EnemyAction.Idle or EnemyAction.Move;
         _prevState = _state;
