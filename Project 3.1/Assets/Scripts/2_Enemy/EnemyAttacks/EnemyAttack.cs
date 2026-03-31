@@ -1,5 +1,12 @@
 using System;
 using UnityEngine;
+public struct EnemyAttackContext
+{
+    public Enemy Enemy;
+    public Transform Origin;
+    public ProjectilePool ProjectilePool;
+    public LayerMask PlayerLayer;
+}
 public abstract class EnemyAttack : ScriptableObject
 {
     [Header("Attack Info")]
@@ -18,7 +25,7 @@ public abstract class EnemyAttack : ScriptableObject
     public void DecreaseWeight() => currentWeight = Mathf.Max(baseWeight - weightDecrement, 0f);
 
     // Attack implementation done by each attack
-    public abstract void Attack();
+    public abstract void Attack(EnemyAttackContext context);
 }
 
 public abstract class EnemyRangedAttack : EnemyAttack {}

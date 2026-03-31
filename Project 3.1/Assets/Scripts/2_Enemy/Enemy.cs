@@ -63,10 +63,7 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
     protected EnemyAttack _requestedAttack;
 
     [Header("Attacks")]
-    [SerializeField] protected EnemyAttack[] rangedAttacks;
-    [SerializeField] protected EnemyAttack[] focusAttacks;
-    [SerializeField] protected EnemyAttack[] meleeAttacks;
-    [SerializeField] protected EnemyAttack[] zoneAttacks;
+    [SerializeField] protected EnemyAttack[] attacks;
 
     // State Machine
     protected EnemyState _state;
