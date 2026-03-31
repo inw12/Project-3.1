@@ -11,6 +11,8 @@ public class CircleShot : EnemyRangedAttack
 
     public override void Attack(EnemyAttackContext context)
     {
+        if (!attackActive) attackActive = true;
+
         var angleStep = 360f / projectileCount;
         for (int i = 0; i < projectileCount; i++)
         {
@@ -28,5 +30,7 @@ public class CircleShot : EnemyRangedAttack
 
             context.ProjectilePool.Get(stats, context.Origin);
         }
+
+        attackActive = false;
     }
 }
