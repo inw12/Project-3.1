@@ -30,12 +30,17 @@ public enum EnemyAction
     AttackMelee     = 4,
     AttackZone      = 5,
     Knockback       = 6,
-    Knockdown       = 7
+    Knockdown       = 7,
+    InCutscene      = 8
 }
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnockable
+public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
 {
+    [Header("Game Components")]
+    [SerializeField] protected EnemyAnimationController animationController;
+    [SerializeField] protected EnemyHurtbox hurtbox;
+
     [Header("Stats")]
     [SerializeField] protected float maxHealth = 100f;
     [SerializeField] protected float maxDefense = 50f;
@@ -45,10 +50,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     [Header("Parry Phase Trigger")]
     [SerializeField] [Range(0f, 1f)] protected float combatTransitionThreshold = 0.25f;
     [SerializeField] protected Signal transitionSignal;
-
-    [Header("Animations")]
-    [SerializeField] protected EnemyAnimationController animationController;
-    [SerializeField] protected EnemyHitFeedback hitFeedback;
 
     [Header("Knockback/Knockdown Settings")]
     [SerializeField] protected float knockbackAmount;
@@ -107,7 +108,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
         // Enemy Component Initialization
         animationController.Initialize();
-        hitFeedback.Initialize();
+        hurtbox.Initialize(_state.CurrentHealth, _state.CurrentDefense, defenseDamageReduction);
 
         _timeScale = 1f;
     }
@@ -116,7 +117,15 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     {
         var deltaTime = Time.deltaTime * _timeScale;
 
-        // Update Timers
+        // Update HP/DEF Stats
+        hurtbox.UpdateState(ref _state);
+
+        // Check for combat phase transition
+        if (_state.CurrentDefense / maxDefense <= combatTransitionThreshold) {
+            transitionSignal.Raise();
+        }
+
+        // State Machine Control
         _cooldownTimer += deltaTime;
         if (_cooldownTimer >= stateChangeCooldown)
         {
@@ -128,9 +137,11 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     {
         var deltaTime = Time.deltaTime * _timeScale;
 
-        animationController.UpdateAnimator(_state);
+        // Update hurtbox HitFeedback
+        hurtbox.UpdateHitFeedback(deltaTime);
 
-        hitFeedback.UpdateEnemyModel(deltaTime);
+        // Update Animator
+        animationController.UpdateAnimator(_state);
 
         // Update State Machine
         _state.IsKnockable = _state.CurrentAction is EnemyAction.Idle or EnemyAction.Move;
@@ -149,49 +160,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
     protected virtual void Move() {}
     protected virtual void Attack() {}
-
-    #region *-- 'IEnemyHealth' Methods --------------------*
-    public void DecreaseHealth(float amount)
-    {
-        // Calculate damage taken
-        var amountToDefense = amount * defenseDamageReduction;
-        var amountToHealth = amount - amountToDefense;
-
-        // Apply to DEF
-        _state.CurrentDefense -= amountToDefense;
-        _state.CurrentDefense = Mathf.Clamp(_state.CurrentDefense, 0f, maxDefense);
-
-        // Apply to HP
-        _state.CurrentHealth -= amountToHealth;
-        _state.CurrentHealth = Mathf.Clamp(_state.CurrentHealth, 0f, maxHealth);
-
-        // Check for death
-        _state.IsAlive = _state.CurrentHealth > 0f;
-
-        // Trigger Hit Feedback
-        hitFeedback.TriggerHitFeedback();
-
-        // Combat Phase Change Signal
-        if (_state.CurrentDefense / maxDefense <= combatTransitionThreshold) {
-            transitionSignal.Raise();
-        }
-
-        // Debug Message
-        Debug.Log("HP: " + _state.CurrentHealth + " / " + maxHealth);
-        Debug.Log("DEF: " + _state.CurrentDefense + " / " + maxDefense);
-    }
-    public void IncreaseDefense(float amount)
-    {
-        _state.CurrentDefense += amount;
-        _state.CurrentDefense = Mathf.Clamp(_state.CurrentDefense, 0f, maxDefense);
-    }
-    public void IncreaseHealth(float amount)
-    {
-        _state.CurrentHealth += amount;
-        _state.CurrentHealth = Mathf.Clamp(_state.CurrentHealth, 0f, maxHealth);
-    }
-    public void OnDeath() {}
-    #endregion
 
     #region *-- 'IHitstunnable' Methods -------------------*
     public IEnumerator TriggerHitstun(float duration)

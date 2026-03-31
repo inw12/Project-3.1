@@ -465,7 +465,6 @@ GameObject:
   - component: {fileID: 3129872163084971204}
   - component: {fileID: 5174979723301954193}
   - component: {fileID: 624520292811982392}
-  - component: {fileID: 1031019446226847307}
   m_Layer: 9
   m_Name: TrainingDummy
   m_TagString: Untagged
@@ -553,14 +552,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 511fd31728d88476ba7791069b470961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::TrainingDummy
+  animationController: {fileID: 8762797250722726464}
+  hurtbox: {fileID: 8582817125898925991}
   maxHealth: 100
   maxDefense: 50
   defenseDamageReduction: 0.9
   moveSpeed: 10
   combatTransitionThreshold: 0.25
   transitionSignal: {fileID: 11400000, guid: c80713b0913164d2eb43e941155b5a69, type: 2}
-  animationController: {fileID: 8762797250722726464}
-  hitFeedback: {fileID: 1031019446226847307}
   knockbackAmount: 5
   knockdownDuration: 2
   stateChangeCooldown: 5
@@ -568,22 +567,6 @@ MonoBehaviour:
   focusAttacks: []
   meleeAttacks: []
   zoneAttacks: []
---- !u!114 &1031019446226847307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2025891571817784993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65eaaa5bb05e9427597cd0b4e4de3802, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Enemy::EnemyHitFeedback
-  enemyModel: {fileID: 5025448945298897605}
-  hitColor: {r: 1, g: 0.05, b: 0.05, a: 1}
-  hitBrightness: 25
-  effectSpeed: 25
 --- !u!1 &2121290933846271806
 GameObject:
   m_ObjectHideFlags: 0
@@ -2001,6 +1984,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8941075231294370086}
   - component: {fileID: 4928136349618031827}
+  - component: {fileID: 8582817125898925991}
+  - component: {fileID: 2428069648536024715}
   m_Layer: 10
   m_Name: Hurtbox
   m_TagString: Untagged
@@ -2046,6 +2031,35 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &8582817125898925991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666152825511217899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c208fa582ea74f62987ad5917b3f05a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Enemy::EnemyHurtbox
+  hitFeedback: {fileID: 2428069648536024715}
+--- !u!114 &2428069648536024715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666152825511217899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65eaaa5bb05e9427597cd0b4e4de3802, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Enemy::EnemyHitFeedback
+  enemyModel: {fileID: 5025448945298897605}
+  hitColor: {r: 1, g: 0.05, b: 0.05, a: 1}
+  hitBrightness: 25
+  effectSpeed: 25
 --- !u!1 &6748863329252409092
 GameObject:
   m_ObjectHideFlags: 0
