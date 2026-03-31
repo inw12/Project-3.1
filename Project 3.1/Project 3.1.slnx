@@ -2,8 +2,8 @@
   <Project Path="Player.csproj" />
   <Project Path="Resources.csproj" />
   <Project Path="Core.csproj" />
-  <Project Path="Game.csproj" />
   <Project Path="Enemy.csproj" />
+  <Project Path="Game.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
 </Solution>

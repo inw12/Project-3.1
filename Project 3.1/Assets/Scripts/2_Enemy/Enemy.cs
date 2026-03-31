@@ -13,6 +13,7 @@ public struct EnemyState
 {
     public EnemyAction CurrentAction;
     public int CurrentAttack;
+    public bool InHitstun;
 }
 public enum EnemyAction
 {
@@ -45,6 +46,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
     [Header("Animations")]
     [SerializeField] protected EnemyAnimationController animationController;
+    [SerializeField] protected EnemyHitFeedback hitFeedback;
 
     [Header("Knockback/Knockdown Settings")]
     [SerializeField] protected float knockbackAmount;
@@ -61,7 +63,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     protected EnemyState _prevState;
 
     protected float _timeScale;
-    protected bool _inHitstun;
 
     protected bool _isKnockable;    // in a state where enemy can be either knocked back or knocked down
 
@@ -75,7 +76,7 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
     // 'IHitstunnable' Variables
     public float TimeScale => _timeScale;
-    public bool InHitstun => _inHitstun;
+    public bool InHitstun => _state.InHitstun;
 
     // 'IKnockable' Variables
     public float KnockbackAmount => knockbackAmount;
@@ -90,16 +91,18 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     protected virtual void Start()
     {
         _state.CurrentAction = EnemyAction.Idle;
+        _state.CurrentAttack = 0;
+        _state.InHitstun = false;
         _prevState = _state;
 
-
+        animationController.Initialize();
+        hitFeedback.Initialize();
 
         _currentHealth = maxHealth;
         _currentDefense = maxDefense;
         _isAlive = _currentHealth > 0f;
 
         _timeScale = 1f;
-        _inHitstun = false;
     }
 
     protected virtual void Update()
@@ -109,7 +112,14 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
     protected virtual void LateUpdate()
     {
-        
+        var deltaTime = Time.deltaTime * _timeScale;
+
+        animationController.UpdateAnimator(_state);
+
+        hitFeedback.UpdateEnemyModel(deltaTime);
+
+        // Update State Machine
+        _prevState = _state;
     }
 
     protected virtual void FixedUpdate()
@@ -138,6 +148,9 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
         // Check for death
         _isAlive = _currentHealth > 0f;
+
+        // Trigger Hit Feedback
+        hitFeedback.TriggerHitFeedback();
     }
     public void IncreaseDefense(float amount)
     {
@@ -155,7 +168,11 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
     #region *-- 'IHitstunnable' Methods -------------------*
     public IEnumerator TriggerHitstun(float duration)
     {
-        throw new System.NotImplementedException();
+        _timeScale = 0f;
+        _state.InHitstun = true;
+        yield return new WaitForSeconds(duration);
+        _timeScale = 1f;
+        _state.InHitstun = false;
     }
     #endregion
 
@@ -169,4 +186,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         throw new System.NotImplementedException();
     }
     #endregion
+
+    public void SetTimeScale(float t) => _timeScale = t;
 }

@@ -147,8 +147,10 @@ public class PlayerAttackMelee : MonoBehaviour
                     e.DecreaseHealth(damage);
 
                     // 2. Try applying hitstun
-                    if (hit.TryGetComponent(out IHitstunnable h)) 
-                        h.TriggerHitstun(hitstunDuration);
+                    if (hit.TryGetComponent(out IHitstunnable h))
+                    {
+                        StartCoroutine(h.TriggerHitstun(hitstunDuration));
+                    }
 
                     // 3. Try applying knockback
 
