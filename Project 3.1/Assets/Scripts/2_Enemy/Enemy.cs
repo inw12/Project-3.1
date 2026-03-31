@@ -58,6 +58,7 @@ public abstract class Enemy : MonoBehaviour, IHitstunnable, IKnockable
     [Header("State Machine Control")]
     [SerializeField] protected float stateChangeCooldown = 5f;
     protected float _cooldownTimer;
+    protected EnemyAttack _requestedAttack;
 
     [Header("Attacks")]
     [SerializeField] protected EnemyAttack[] rangedAttacks;
