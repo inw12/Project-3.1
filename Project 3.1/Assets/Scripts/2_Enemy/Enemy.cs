@@ -175,6 +175,11 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         // Trigger Hit Feedback
         hitFeedback.TriggerHitFeedback();
 
+        // Combat Phase Change Signal
+        if (_state.CurrentDefense / maxDefense <= combatTransitionThreshold) {
+            transitionSignal.Raise();
+        }
+
         // Debug Message
         Debug.Log("HP: " + _state.CurrentHealth + " / " + maxHealth);
         Debug.Log("DEF: " + _state.CurrentDefense + " / " + maxDefense);
