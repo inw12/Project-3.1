@@ -33,7 +33,7 @@ public enum EnemyAction
     Knockdown       = 7
 }
 
-[RequireComponent(typeof(CharacterController), typeof(CapsuleCollider))]
+[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnockable
 {
     [Header("Stats")]
@@ -70,9 +70,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
 
     // Local TimeScale
     protected float _timeScale;
-
-    // Character Controller
-    protected CharacterController _controller;
 
     // 'IEnemyHealth' Variables
     public float MaxHealth => maxHealth;
@@ -111,7 +108,6 @@ public abstract class Enemy : MonoBehaviour, IEnemyHealth, IHitstunnable, IKnock
         // Enemy Component Initialization
         animationController.Initialize();
         hitFeedback.Initialize();
-        _controller = GetComponent<CharacterController>();
 
         _timeScale = 1f;
     }
